@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "122293709281",
+    "firebase_url": "https://table-6a335.firebaseio.com",
+    "project_id": "table-6a335",
+    "storage_bucket": "table-6a335.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:122293709281:android:efc35f8d132d3af6",
+        "android_client_info": {
+          "package_name": "com.example.emily.table"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "122293709281-91fv810j6dogll728e62kpdkv7cdnjrs.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCJfXsTySkKIVwXGmWuTo_CZl3dt2_ARZ0"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
