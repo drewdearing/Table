@@ -10,6 +10,7 @@ import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
+import com.facebook.Profile;
 import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
@@ -36,8 +37,7 @@ public class Login extends AppCompatActivity {
         boolean loggedIn = AccessToken.getCurrentAccessToken() != null;
         if (loggedIn) {
             LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile"));
-            Intent goHome = new Intent(getApplicationContext(), Home.class);
-            startActivity(goHome);
+            login();
         }
 //        LoginManager.getInstance().registerCallback(callbackManager,
 //                new FacebookCallback<LoginResult>() {
@@ -71,10 +71,7 @@ public class Login extends AppCompatActivity {
             @Override
             public void onSuccess(LoginResult loginResult) {
                 // App code
-//                Intent goHome = new Intent(getApplicationContext(), Home.class);
-//                startActivity(goHome);
-                TextView hello = findViewById(R.id.textView);
-                hello.setText(EMAIL);
+                login();
             }
 
             @Override
@@ -90,6 +87,14 @@ public class Login extends AppCompatActivity {
 
     }
 
+    private void login() {
+        Intent goHome = new Intent(getApplicationContext(), Home.class);
+        Profile p = Profile.getCurrentProfile();
+        Bundle b = new Bundle();
+        b.putParcelable("Profile", p);
+        goHome.putExtras(b);
+        startActivity(goHome);
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
