@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter;
 /**
  * Created by emily on 4/2/18.
  * Code based off of DemoListViewFrag assignment
+ * Meant to be used inside TableFragment
  */
 
 public class TableListViewAdapter extends ArrayAdapter {
