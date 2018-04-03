@@ -3,7 +3,11 @@ package com.example.emily.table;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 /**
  * Created by emily on 4/2/18.
@@ -11,7 +15,17 @@ import android.widget.ArrayAdapter;
  * Meant to be used inside TableFragment
  */
 
-public class TableListViewAdapter extends ArrayAdapter {
+public class TableListViewAdapter extends ArrayAdapter<Table> {
+
+    static class ViewHolder {
+        TextView theTextView;
+        ImageView theImageView;
+
+        public ViewHolder(View v) {
+            theTextView = (TextView) v.findViewById(R.id.table_row_text);
+            theImageView = (ImageView) v.findViewById(R.id.table_row_pic);
+        }
+    }
 
     private LayoutInflater theInflater = null;
 
@@ -20,5 +34,23 @@ public class TableListViewAdapter extends ArrayAdapter {
         // The LayoutInflator puts a layout into the right View
         theInflater = LayoutInflater.from(getContext());
         Log.d("ViewHolderList", "Inflate");
+    }
+
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        TableListViewAdapter.ViewHolder vh = null;
+        if (convertView == null) {
+            convertView = theInflater.inflate(R.layout.table_row, parent, false);
+            vh = new TableListViewAdapter.ViewHolder(convertView);
+            convertView.setTag(vh);
+            Log.d("FancyAdapter create ", Integer.toString(position));
+        } else {
+            vh = (TableListViewAdapter.ViewHolder) convertView.getTag();
+        }
+        // We retrieve the text from the array
+        Table table = getItem(position);
+        vh.theTextView.setText(table.name);
+
+        return convertView;
     }
 }

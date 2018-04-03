@@ -7,10 +7,16 @@ package com.example.emily.table;
 
 public class Table {
 
-    private String name;
+    public String name;
 
     public Table (String name) {
         this.name = name;
     }
+
+    public String getName() {
+        return name;
+    }
+
+
 
 }

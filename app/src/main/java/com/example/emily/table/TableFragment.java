@@ -30,6 +30,7 @@ public class TableFragment extends Fragment {
     private FirebaseDatabase database;
     private DatabaseReference myRef;
 
+
     //Code from DemoListFragView
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container,
@@ -37,20 +38,20 @@ public class TableFragment extends Fragment {
 
         final TableListViewAdapter adapter = new TableListViewAdapter(container.getContext());
 
-        //Init database
+        // Code from Google's Firebase example
         database = FirebaseDatabase.getInstance();
         myRef = database.getReference("message");
         // Read from the database
-        // Code from Google's Firebase example
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
-                String value = dataSnapshot.getValue(String.class);
-                Log.d(TAG, "Value is: " + value);
+                Table table = dataSnapshot.getValue(Table.class);
+                Log.d(TAG, "table onDataChange");
                 adapter.clear();
-                adapter.addAll();
+                adapter.add(table);
+                Log.w(TAG, "added table to adapter");
             }
 
             @Override
@@ -60,10 +61,11 @@ public class TableFragment extends Fragment {
             }
         });
 
-//        theAdapter.addAll(nameAndRatings);
 
         // Get the ListView so we can work with it
-        theListView = (ListView) container.findViewById(R.id.theListView);
+
+        //This line wont work as of rn, it will work if I insert a list view into the Home.xml
+        theListView = (ListView) container.findViewById(R.id.tableListView);
         theListView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         // Connect the ListView with the Adapter that acts as a bridge between it and the array
         theListView.setAdapter(adapter);
@@ -76,6 +78,6 @@ public class TableFragment extends Fragment {
                     }
                 }
         );
-        return null;
+        return inflater.inflate(R.layout.table_frag, container, false);
     }
 }
