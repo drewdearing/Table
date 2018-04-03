@@ -35,10 +35,11 @@ public class TableFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
 
-        //Get Database information
+        final TableListViewAdapter adapter = new TableListViewAdapter(container.getContext());
+
+        //Init database
         database = FirebaseDatabase.getInstance();
         myRef = database.getReference("message");
-
         // Read from the database
         // Code from Google's Firebase example
         myRef.addValueEventListener(new ValueEventListener() {
@@ -48,6 +49,8 @@ public class TableFragment extends Fragment {
                 // whenever data at this location is updated.
                 String value = dataSnapshot.getValue(String.class);
                 Log.d(TAG, "Value is: " + value);
+                adapter.clear();
+                adapter.addAll();
             }
 
             @Override
@@ -57,9 +60,6 @@ public class TableFragment extends Fragment {
             }
         });
 
-
-        // We point the ListAdapter to our custom adapter
-        TableListViewAdapter adapter = new TableListViewAdapter(container.getContext());
 //        theAdapter.addAll(nameAndRatings);
 
         // Get the ListView so we can work with it
