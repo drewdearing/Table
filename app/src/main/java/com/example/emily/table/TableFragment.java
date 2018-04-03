@@ -29,6 +29,7 @@ public class TableFragment extends Fragment {
     private ListView theListView;
     private FirebaseDatabase database;
     private DatabaseReference myRef;
+    private TableListViewAdapter adapter;
 
 
     //Code from DemoListFragView
@@ -36,7 +37,7 @@ public class TableFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
 
-        final TableListViewAdapter adapter = new TableListViewAdapter(container.getContext());
+        adapter = new TableListViewAdapter(container.getContext());
 
         // Code from Google's Firebase example
         database = FirebaseDatabase.getInstance();
@@ -60,11 +61,16 @@ public class TableFragment extends Fragment {
             }
         });
 
+        return inflater.inflate(R.layout.table_frag, container, false);
+    }
 
+    @Override
+    public void onStart(){
+        super.onStart();
         // Get the ListView so we can work with it
 
         //This line wont work as of rn, it will work if I insert a list view into the Home.xml
-        theListView = (ListView) container.findViewById(R.id.tableListView);
+        theListView = (ListView) getView().findViewById(R.id.tableListView);
         theListView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         // Connect the ListView with the Adapter that acts as a bridge between it and the array
         theListView.setAdapter(adapter);
@@ -77,6 +83,5 @@ public class TableFragment extends Fragment {
                     }
                 }
         );
-        return inflater.inflate(R.layout.table_frag, container, false);
     }
 }
