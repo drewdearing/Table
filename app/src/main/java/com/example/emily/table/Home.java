@@ -92,6 +92,7 @@ public class Home extends AppCompatActivity {
         startFragment = new RestaurantFragment();
         findFragment = new TableFragment();
         profileFragment = new ProfileFragment();
+        actionBar.setTitle("Start a Table");
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.add(R.id.theFrame, startFragment, restaurantTag);
         ft.add(R.id.theFrame, findFragment, tableTag);
