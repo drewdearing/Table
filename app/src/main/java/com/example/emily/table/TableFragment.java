@@ -49,7 +49,6 @@ public class TableFragment extends Fragment {
                 // whenever data at this location is updated.
                 Table table = dataSnapshot.getValue(Table.class);
                 Log.d(TAG, "table onDataChange");
-                adapter.clear();
                 adapter.add(table);
                 Log.w(TAG, "added table to adapter");
             }
