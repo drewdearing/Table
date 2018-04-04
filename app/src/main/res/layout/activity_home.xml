@@ -4,30 +4,31 @@
     android:id="@+id/swipe_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
-
-    <FrameLayout android:id="@+id/theFrame"
+    <android.support.constraint.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        xmlns:android="http://schemas.android.com/apk/res/android">
-        <android.support.constraint.ConstraintLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            xmlns:tools="http://schemas.android.com/tools"
+        tools:context="com.example.emily.table.Home">
+
+        <FrameLayout android:id="@+id/theFrame"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:context="com.example.emily.table.Home">
+            xmlns:android="http://schemas.android.com/apk/res/android"/>
 
-            <android.support.design.widget.BottomNavigationView
-                android:id="@+id/navigation"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="0dp"
-                android:layout_marginStart="0dp"
-                android:background="?android:attr/windowBackground"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:menu="@menu/navigation" />
-        </android.support.constraint.ConstraintLayout>
-    </FrameLayout>
+
+        <android.support.design.widget.BottomNavigationView
+            android:id="@+id/navigation"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="0dp"
+            android:layout_marginStart="0dp"
+            android:background="?android:attr/windowBackground"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:menu="@menu/navigation" />
+    </android.support.constraint.ConstraintLayout>
+
 </android.support.v4.widget.SwipeRefreshLayout>
