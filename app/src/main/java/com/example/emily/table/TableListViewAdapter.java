@@ -44,13 +44,14 @@ public class TableListViewAdapter extends ArrayAdapter<Table> {
             convertView = theInflater.inflate(R.layout.table_row, parent, false);
             vh = new TableListViewAdapter.ViewHolder(convertView);
             convertView.setTag(vh);
-            Log.d("FancyAdapter create ", Integer.toString(position));
+            Log.d("Adapter create ", Integer.toString(position));
         } else {
             vh = (TableListViewAdapter.ViewHolder) convertView.getTag();
         }
         // We retrieve the text from the array
         Table table = getItem(position);
-        vh.theTextView.setText(table.name);
+        vh.theTextView.setText(table.getName());
+        Log.d("ViewAdapter", "table name: " + table.getName() + " at pos " + position);
         vh.theTextView.setTextColor(Color.BLACK);
         return convertView;
     }

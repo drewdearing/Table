@@ -9,15 +9,12 @@ public class Table {
 
     public String name;
 
-    public Table () {
+    public Table () {}
 
-    }
     public Table (String name) {
         this.name = name;
     }
 
-    public String getName() {
-        return name;
-    }
+    public String getName() {return name;}
 
 }

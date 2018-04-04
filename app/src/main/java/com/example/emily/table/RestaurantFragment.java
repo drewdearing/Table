@@ -59,6 +59,12 @@ public class RestaurantFragment extends Fragment {
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(getActivity());
         requestQueue = Volley.newRequestQueue(getActivity());
         queryPlaces();
+
+//        //Try to add in a Table to the database
+//        database = FirebaseDatabase.getInstance();
+//        myRef = database.getReference();
+//        Table table = new Table("test2");
+//        myRef.child("Tables").setValue(table);
         return v;
     }
 

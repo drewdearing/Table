@@ -48,11 +48,12 @@ public class TableFragment extends Fragment {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
-                Table table = dataSnapshot.getValue(Table.class);
                 Log.d(TAG, "table onDataChange");
-                if (table != null)
+                for (DataSnapshot tableSnapShot : dataSnapshot.getChildren()) {
+                    Table table = tableSnapShot.getValue(Table.class);
                     adapter.addItem(table);
-                Log.w(TAG, "added table to adapter");
+                    Log.w(TAG, "added " + table.getName() + " to adapter");
+                }
             }
 
             @Override
