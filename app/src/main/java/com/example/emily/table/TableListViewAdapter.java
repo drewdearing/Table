@@ -1,6 +1,7 @@
 package com.example.emily.table;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -50,7 +51,12 @@ public class TableListViewAdapter extends ArrayAdapter<Table> {
         // We retrieve the text from the array
         Table table = getItem(position);
         vh.theTextView.setText(table.name);
-
+        vh.theTextView.setTextColor(Color.BLACK);
         return convertView;
+    }
+
+    public void addItem(final Table item) {
+        add(item);
+        notifyDataSetChanged();
     }
 }

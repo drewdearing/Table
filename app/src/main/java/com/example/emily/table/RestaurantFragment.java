@@ -10,6 +10,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 /**
  * Created by emily on 3/29/18.
  */
@@ -18,6 +21,8 @@ public class RestaurantFragment extends Fragment {
 
     static String api_key = "AIzaSyDB1j3umaGyjXOMFf7ECjZIsjipT5eHPUM";
     static int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
+    private FirebaseDatabase database;
+    private DatabaseReference myRef;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -30,6 +35,14 @@ public class RestaurantFragment extends Fragment {
         } else {
             queryPlaces();
         }
+
+        //Try to add in a Table to the database
+        database = FirebaseDatabase.getInstance();
+        myRef = database.getReference();
+        Table table = new Table();
+        table.name = "test";
+        myRef.child("Tables").setValue(table);
+
 
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.restaurant_frag, container, false);

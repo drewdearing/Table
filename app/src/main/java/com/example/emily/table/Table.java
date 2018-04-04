@@ -9,6 +9,9 @@ public class Table {
 
     public String name;
 
+    public Table () {
+
+    }
     public Table (String name) {
         this.name = name;
     }
@@ -16,7 +19,5 @@ public class Table {
     public String getName() {
         return name;
     }
-
-
 
 }

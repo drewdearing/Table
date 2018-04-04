@@ -41,7 +41,7 @@ public class TableFragment extends Fragment {
 
         // Code from Google's Firebase example
         database = FirebaseDatabase.getInstance();
-        myRef = database.getReference("message");
+        myRef = database.getReference();
         // Read from the database
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -50,7 +50,8 @@ public class TableFragment extends Fragment {
                 // whenever data at this location is updated.
                 Table table = dataSnapshot.getValue(Table.class);
                 Log.d(TAG, "table onDataChange");
-                adapter.add(table);
+                if (table != null)
+                    adapter.addItem(table);
                 Log.w(TAG, "added table to adapter");
             }
 
