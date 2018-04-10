@@ -7,16 +7,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
 
 import static android.content.ContentValues.TAG;
 
@@ -29,7 +28,7 @@ public class TableFragment extends Fragment {
     private ListView theListView;
     private FirebaseDatabase database;
     private DatabaseReference myRef;
-    private TableListViewAdapter adapter;
+    private TableAdapter adapter;
 
 
     //Code from DemoListFragView
@@ -37,7 +36,6 @@ public class TableFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
 
-        adapter = new TableListViewAdapter(container.getContext());
 
         // Code from Google's Firebase example
         database = FirebaseDatabase.getInstance();
@@ -49,11 +47,13 @@ public class TableFragment extends Fragment {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
                 Log.d(TAG, "table onDataChange");
+                ArrayList<Table> tables = new ArrayList<>();
                 for (DataSnapshot tableSnapShot : dataSnapshot.getChildren()) {
                     Table table = tableSnapShot.getValue(Table.class);
-                    adapter.addItem(table);
+                    tables.add(table);
                     Log.w(TAG, "added " + table.getName() + " to adapter");
                 }
+                adapter = new TableAdapter(container.getContext(), tables);
             }
 
             @Override
