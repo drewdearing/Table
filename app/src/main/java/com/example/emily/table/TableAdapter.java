@@ -1,7 +1,9 @@
 package com.example.emily.table;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -20,22 +22,34 @@ import java.util.ArrayList;
  */
 
 public class TableAdapter extends RecyclerView.Adapter<TableAdapter.TableViewHolder>{
+    private Context context;
+    private ArrayList<Table> tables;
 
     public class TableViewHolder extends RecyclerView.ViewHolder{
         TextView theTextView;
         ImageView theImageView;
+        Table table;
 
-
-        public TableViewHolder(View v) {
+        public TableViewHolder(final View v) {
             super(v);
             theTextView = (TextView) v.findViewById(R.id.table_row_text);
             theImageView = (ImageView) v.findViewById(R.id.table_row_pic);
+
+            //From RedFetch Homework
+            v.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(context, TableDetails.class);
+                    if (table == null) {
+                        Log.d("TableViewHolder onclick", "table is null");
+                    }
+                    intent.putExtra("Table", table);
+                    v.getContext().startActivity(intent);
+                }
+            });
         }
     }
 
-
-    private Context context;
-    private ArrayList<Table> tables;
 
     public TableAdapter(Context _context, ArrayList<Table> tables) {
         context = _context;
@@ -53,6 +67,7 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.TableViewHol
     public void onBindViewHolder(TableViewHolder holder, int position) {
         Table t = tables.get(position);
         holder.theTextView.setText(t.name);
+        holder.table = t;
     }
 
 

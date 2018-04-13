@@ -1,5 +1,6 @@
 package com.example.emily.table;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
@@ -7,7 +8,7 @@ import java.util.ArrayList;
  * Used to represent a group of people eating together at a restaurant
  */
 
-public class Table {
+public class Table implements Serializable{
 
     public String name; //event or table name
     public String description;

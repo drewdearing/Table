@@ -2,6 +2,8 @@ package com.example.emily.table;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,22 +27,24 @@ import static android.content.ContentValues.TAG;
 
 public class TableFragment extends Fragment {
 
-    private ListView theListView;
+    private RecyclerView recyclerView;
     private FirebaseDatabase database;
     private DatabaseReference myRef;
     private TableAdapter adapter;
 
 
-    //Code from DemoListFragView
+    //Code from FCListRecyclerView
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
 
+        View v = inflater.inflate(R.layout.table_frag, container, false);
+        recyclerView = (RecyclerView) v.findViewById(R.id.tableRecyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        // Code from Google's Firebase example
+
         database = FirebaseDatabase.getInstance();
         myRef = database.getReference();
-        // Read from the database
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -54,6 +58,7 @@ public class TableFragment extends Fragment {
                     Log.w(TAG, "added " + table.getName() + " to adapter");
                 }
                 adapter = new TableAdapter(container.getContext(), tables);
+                recyclerView.setAdapter(adapter);
             }
 
             @Override
@@ -63,27 +68,6 @@ public class TableFragment extends Fragment {
             }
         });
 
-        return inflater.inflate(R.layout.table_frag, container, false);
-    }
-
-    @Override
-    public void onStart(){
-        super.onStart();
-        // Get the ListView so we can work with it
-
-        //This line wont work as of rn, it will work if I insert a list view into the Home.xml
-        theListView = (ListView) getView().findViewById(R.id.tableListView);
-        theListView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-        // Connect the ListView with the Adapter that acts as a bridge between it and the array
-        theListView.setAdapter(adapter);
-
-        theListView.setOnItemClickListener(
-                new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                        //Go to another intent
-                    }
-                }
-        );
+        return v;
     }
 }
