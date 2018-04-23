@@ -137,6 +137,12 @@ public class RestaurantFragment extends Fragment {
                     Restaurant r = new Restaurant();
                     JSONObject entry = children.getJSONObject(i);
                     String name = entry.getString("name");
+                    JSONArray photos = entry.getJSONArray("photos");
+                    JSONObject photo = photos.getJSONObject(0);
+                    String photoRef = photo.getString("photo_reference");
+                    int maxWidth = photo.getInt("width");
+                    r.photo = "https://maps.googleapis.com/maps/api/place/photo?photoreference="
+                            +photoRef + "&maxwidth=" + maxWidth + "&key=" + api_key;
                     r.name = name;
                     list.add(r);
                 }
