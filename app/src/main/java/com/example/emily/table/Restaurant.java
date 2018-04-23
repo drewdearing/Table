@@ -8,6 +8,8 @@ public class Restaurant {
 
     public String name;
 
+    public String photo;
+
     public Restaurant () {}
 
     public Restaurant (String name) {
