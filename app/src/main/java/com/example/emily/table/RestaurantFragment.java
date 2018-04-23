@@ -40,6 +40,7 @@ public class RestaurantFragment extends Fragment {
 
     static String api_key = "AIzaSyDB1j3umaGyjXOMFf7ECjZIsjipT5eHPUM";
     static int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
+    private static boolean isDebug = true;
     private FusedLocationProviderClient mFusedLocationClient;
     private RequestQueue requestQueue;
     private ArrayList<Restaurant> restList;
@@ -70,15 +71,20 @@ public class RestaurantFragment extends Fragment {
             requestPermissions(new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
                     PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
         } else {
-            Log.d("RestaurantFragment", "kill me");
             mFusedLocationClient.getLastLocation()
                     .addOnSuccessListener(getActivity(), new OnSuccessListener<Location>() {
                         @Override
                         public void onSuccess(Location location) {
-                            if (location != null) {
-                                userLocation = location;
-                                Log.d("RestaurantFragment", userLocation.toString());
-                                String location_str = userLocation.getLatitude() + "," + userLocation.getLongitude();
+                            if (location != null || isDebug) {
+                                String location_str;
+                                if(!isDebug) {
+                                    userLocation = location;
+                                    Log.d("RestaurantFragment", userLocation.toString());
+                                    location_str = userLocation.getLatitude() + "," + userLocation.getLongitude();
+                                }
+                                else{
+                                    location_str = "30.286253,-97.7386227";
+                                }
                                 String request = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location="
                                         + location_str
                                         + "&radius=500&types=restaurant&key="
