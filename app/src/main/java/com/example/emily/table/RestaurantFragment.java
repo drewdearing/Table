@@ -45,8 +45,6 @@ public class RestaurantFragment extends Fragment {
     private RequestQueue requestQueue;
     private ArrayList<Restaurant> restList;
     private Location userLocation = null;
-    private FirebaseDatabase database;
-    private DatabaseReference myRef;
     private RecyclerView rv;
     private RestaurantAdapter listAdapter;
 
