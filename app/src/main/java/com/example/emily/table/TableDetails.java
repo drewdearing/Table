@@ -50,7 +50,8 @@ public class TableDetails extends AppCompatActivity {
                         //Add current user to the guest list
                         table.getGuests().add(user);
                         //Update the database
-                        myRef.child("Tables").child(table.getTableId()).child("Guests").setValue(user);
+//                        myRef.child("Tables").child(table.getTableId()).child("Guests").child(currentUserId).setValue(user);
+                        myRef.child("Tables").child(table.getTableId()).child("Guests").child(currentUserId).setValue(currentUserId);
                     }
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
