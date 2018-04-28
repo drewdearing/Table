@@ -35,17 +35,14 @@ public class Home extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.start:
-                    actionBar.setTitle("Start a Table");
                     showFragment(startFragment, restaurantTag);
                     prevFragment = startFragment;
                     return true;
                 case R.id.find:
-                    actionBar.setTitle("Find a Table");
                     showFragment(findFragment, tableTag);
                     prevFragment = findFragment;
                     return true;
                 case R.id.profile:
-                    actionBar.setTitle(p.getFirstName() + "'s Profile");
                     showFragment(profileFragment, profileTag);
                     prevFragment = profileFragment;
                     return true;

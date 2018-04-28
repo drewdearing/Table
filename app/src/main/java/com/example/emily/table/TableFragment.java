@@ -2,6 +2,8 @@ package com.example.emily.table;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -31,6 +33,7 @@ public class TableFragment extends Fragment {
     private FirebaseDatabase database;
     private DatabaseReference myRef;
     private TableAdapter adapter;
+    private ActionBar actionBar;
 
 
     //Code from FCListRecyclerView
@@ -71,5 +74,12 @@ public class TableFragment extends Fragment {
         });
 
         return v;
+    }
+
+    @Override
+    public void onActivityCreated(Bundle b) {
+        super.onActivityCreated(b);
+        actionBar = ((AppCompatActivity)getActivity()).getSupportActionBar();
+        actionBar.setTitle("Find a Table");
     }
 }

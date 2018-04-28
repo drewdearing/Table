@@ -4,6 +4,8 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -47,6 +49,7 @@ public class RestaurantFragment extends Fragment {
     private Location userLocation = null;
     private RecyclerView rv;
     private RestaurantAdapter listAdapter;
+    private ActionBar actionBar;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -60,6 +63,13 @@ public class RestaurantFragment extends Fragment {
         queryPlaces();
 
         return v;
+    }
+
+    @Override
+    public void onActivityCreated(Bundle b) {
+        super.onActivityCreated(b);
+        actionBar = ((AppCompatActivity)getActivity()).getSupportActionBar();
+        actionBar.setTitle("Start a Table");
     }
 
     private void queryPlaces() {
