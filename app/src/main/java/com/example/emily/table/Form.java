@@ -44,7 +44,8 @@ public class Form extends AppCompatActivity {
                 database = FirebaseDatabase.getInstance();
                 myRef = database.getReference();
                 Table table = new Table("test"+Math.random() * 1000);
-                myRef.child("Tables").setValue(table);
+                String key = myRef.push().getKey();
+                myRef.child("Tables").child(key).setValue(table);
                 onBackPressed();
             }
         });

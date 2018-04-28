@@ -52,11 +52,13 @@ public class TableFragment extends Fragment {
                 // whenever data at this location is updated.
                 Log.d(TAG, "table onDataChange");
                 ArrayList<Table> tables = new ArrayList<>();
-                for (DataSnapshot tableSnapShot : dataSnapshot.getChildren()) {
-                    Table table = tableSnapShot.getValue(Table.class);
+                DataSnapshot tableSnapShot = dataSnapshot.child("Tables");
+                for(DataSnapshot tableData : tableSnapShot.getChildren()) {
+                    Table table = tableData.getValue(Table.class);
                     tables.add(table);
                     Log.w(TAG, "added " + table.getName() + " to adapter");
                 }
+
                 adapter = new TableAdapter(container.getContext(), tables);
                 recyclerView.setAdapter(adapter);
             }
