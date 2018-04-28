@@ -20,10 +20,12 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Re
 
     private Context mContext;
     private ArrayList<Restaurant> mData;
+    private String userId;
 
-    public RestaurantAdapter(Context context, ArrayList<Restaurant> restList){
+    public RestaurantAdapter(Context context, ArrayList<Restaurant> restList, String userId){
         mContext = context;
         mData = restList;
+        this.userId = userId;
     }
 
     private void createTable(int position){
@@ -32,6 +34,7 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Re
         Bundle b = new Bundle();
         b.putString("name", tableRestaurant.name);
         b.putString("photo", tableRestaurant.photo);
+        b.putString("userId", userId);
         form.putExtras(b);
         mContext.startActivity(form);
     }

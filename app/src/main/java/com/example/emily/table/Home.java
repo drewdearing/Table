@@ -104,9 +104,14 @@ public class Home extends AppCompatActivity {
                     }
                     Log.d("HELP", user.getFirstName());
                     //Create Fragments, copied from DemoListViewFrag
+                    Bundle b = new Bundle();
+                    b.putString("userId", user.getId());
                     startFragment = new RestaurantFragment();
+                    startFragment.setArguments(b);
                     findFragment = new TableFragment();
+                    findFragment.setArguments(b);
                     profileFragment = new ProfileFragment();
+                    profileFragment.setArguments(b);
                     actionBar.setTitle("Start a Table");
                     FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
                     ft.add(R.id.theFrame, startFragment, restaurantTag);

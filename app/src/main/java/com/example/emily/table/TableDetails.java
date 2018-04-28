@@ -42,4 +42,9 @@ public class TableDetails extends AppCompatActivity {
         GuestAdapter adapter = new GuestAdapter(this, table.getGuests());
         recyclerView.setAdapter(adapter);
     }
+
+//    @Override
+//    public void joinTable(View v) {
+//
+//    }
 }

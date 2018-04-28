@@ -27,6 +27,7 @@ public class Form extends AppCompatActivity {
     private Button submitButton;
     private String restaurantName;
     private String photoURL;
+    private String userId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +39,7 @@ public class Form extends AppCompatActivity {
         Intent restaurantInfo = getIntent();
         restaurantName = restaurantInfo.getExtras().getString("name");
         photoURL = restaurantInfo.getExtras().getString("photo");
+        userId = restaurantInfo.getExtras().getString("userId");
         actionBar.setTitle(restaurantName);
         Glide
                 .with(getApplicationContext())
@@ -66,7 +68,7 @@ public class Form extends AppCompatActivity {
         Restaurant r = new Restaurant(restaurantName);
         r.photo = photoURL;
         //Create new table object
-        Table table = new Table(name);
+        Table table = new Table(name, userId);
         table.description = desc;
         table.restaurant = r;
 

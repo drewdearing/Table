@@ -50,6 +50,7 @@ public class RestaurantFragment extends Fragment {
     private RecyclerView rv;
     private RestaurantAdapter listAdapter;
     private ActionBar actionBar;
+    private String userId;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -61,7 +62,7 @@ public class RestaurantFragment extends Fragment {
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(getActivity());
         requestQueue = Volley.newRequestQueue(getActivity());
         queryPlaces();
-
+        userId = getArguments().getString("userId");
         return v;
     }
 
@@ -105,7 +106,7 @@ public class RestaurantFragment extends Fragment {
                                                 Log.d("RestaurantFragment", response.toString());
                                                 restList = jsonToRestaurants(response);
                                                 Log.d("RestaurantFragment", restList.toString());
-                                                listAdapter = new RestaurantAdapter(getContext(), restList);
+                                                listAdapter = new RestaurantAdapter(getContext(), restList, userId);
                                                 rv.setAdapter(listAdapter);
                                             }
                                         }, new Response.ErrorListener() {
