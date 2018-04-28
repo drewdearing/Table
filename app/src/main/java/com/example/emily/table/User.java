@@ -11,11 +11,11 @@ public class User{
     private String name;
     private String firstName;
     private String bio;
-    private String pictureURL;
+    private String pic;
 
     public User(String id, String name, String firstName, String pic) {
         this.id = id;
-        this.pictureURL = pic;
+        this.pic = pic;
         this.name = name;
         this.firstName = firstName;
         this.bio = "";
@@ -26,6 +26,6 @@ public class User{
     public String getId(){return id;}
     public String getName(){return name;}
     public String getFirstName(){return firstName;}
-    public String getPic(){return pictureURL;}
+    public String getPic(){return pic;}
     public String getBio(){return bio; }
 }
