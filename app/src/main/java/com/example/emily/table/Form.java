@@ -6,10 +6,14 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatEditText;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
+
 import com.bumptech.glide.Glide;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -21,6 +25,8 @@ public class Form extends AppCompatActivity {
     private ImageView photoView;
     private ActionBar actionBar;
     private Button submitButton;
+    private String restaurantName;
+    private String photoURL;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,8 +36,8 @@ public class Form extends AppCompatActivity {
         submitButton = findViewById(R.id.form_submit);
         actionBar = getSupportActionBar();
         Intent restaurantInfo = getIntent();
-        String restaurantName = restaurantInfo.getExtras().getString("name");
-        String photoURL = restaurantInfo.getExtras().getString("photo");
+        restaurantName = restaurantInfo.getExtras().getString("name");
+        photoURL = restaurantInfo.getExtras().getString("photo");
         actionBar.setTitle(restaurantName);
         Glide
                 .with(getApplicationContext())
@@ -43,13 +49,27 @@ public class Form extends AppCompatActivity {
                 //need to handle user trees and random ids.
                 database = FirebaseDatabase.getInstance();
                 myRef = database.getReference();
-                Table table = new Table("test"+Math.random() * 1000);
-                table.description = "hi";
                 String key = myRef.push().getKey();
-                myRef.child("Tables").child(key).setValue(table);
+                myRef.child("Tables").child(key).setValue(initTable());
                 onBackPressed();
             }
         });
 
+    }
+
+    private Table initTable() {
+        AppCompatEditText nameView = (AppCompatEditText) findViewById(R.id.form_name);
+        String name = nameView.getText().toString();
+        AppCompatEditText descView = (AppCompatEditText) findViewById(R.id.form_text);
+        String desc = descView.getText().toString();
+        //Create Restaurant object
+        Restaurant r = new Restaurant(restaurantName);
+        r.photo = photoURL;
+        //Create new table object
+        Table table = new Table(name);
+        table.description = desc;
+        table.restaurant = r;
+
+        return table;
     }
 }
