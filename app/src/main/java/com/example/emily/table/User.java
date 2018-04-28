@@ -24,5 +24,6 @@ public class User{
     public String getId(){return id;}
     public String getName(){return name;}
     public String getFirstName(){return firstName;}
+    public Uri getPic(){return pictureURL;}
 
 }

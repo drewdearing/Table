@@ -109,7 +109,7 @@ public class Login extends AppCompatActivity {
         }
     }
 
-    protected void checkUser(final Profile p) {
+    private void checkUser(final Profile p) {
         database = FirebaseDatabase.getInstance();
         myRef = database.getReference();
 

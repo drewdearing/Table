@@ -13,19 +13,18 @@ public class Table implements Serializable{
     public String name; //event or table name
     public String description;
     public Restaurant restaurant;
-    public ArrayList<Guest> guests;
+    public ArrayList<User> guests;
 
     public Table () {
-        guests = new ArrayList<Guest>();
+        guests = new ArrayList<>();
     }
 
     public Table (String name) {
-        guests = new ArrayList<Guest>();
+        guests = new ArrayList<>();
         this.name = name;
     }
-
     public String getName() {return name;}
     public String getDescription() {return description; }
     public Restaurant getRestaurant() {return restaurant;}
-    public ArrayList<Guest> getGuests() {return guests; }
+    public ArrayList<User> getGuests() {return guests; }
 }
