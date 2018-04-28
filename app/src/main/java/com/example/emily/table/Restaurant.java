@@ -1,10 +1,12 @@
 package com.example.emily.table;
 
+import java.io.Serializable;
+
 /**
  * Created by drewdearing on 4/4/18.
  */
 
-public class Restaurant {
+public class Restaurant implements Serializable{
 
     public String name;
 

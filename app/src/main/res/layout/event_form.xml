@@ -25,7 +25,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"g
+        android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         android:hint="Event Name"
         app:layout_constraintBottom_toTopOf="@+id/form_text" />
