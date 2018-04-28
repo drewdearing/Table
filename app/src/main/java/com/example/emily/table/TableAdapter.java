@@ -86,26 +86,32 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.TableViewHol
         holder.tableRest.setText(t.restaurant.name);
         holder.table = t;
         final TableViewHolder tempHolder = holder;
-        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                DataSnapshot userData = dataSnapshot.child("Users");
-                String url = null;
-                if(userData.child(userId).exists()) {
-                    User user = userData.child(userId).getValue(User.class);
-                    Glide
-                            .with(context)
-                            .load(user.getPic())
-                            .dontTransform()
-                            .into(tempHolder.tablePic);
+        final Table tableTemp = t;
+        if(tableTemp.userId != null) {
+            myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    DataSnapshot userData = dataSnapshot.child("Users");
+                    if (userData.child(tableTemp.userId).exists()) {
+                        User user = userData.child(tableTemp.userId).getValue(User.class);
+                        Log.d("HELP", user.getPic());
+                        Glide
+                                .with(context)
+                                .load(user.getPic())
+                                .dontTransform()
+                                .into(tempHolder.tablePic);
+                    }
                 }
-            }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
 
-            }
-        });
+                }
+            });
+        }
+        else{
+            
+        }
     }
 
 
