@@ -14,7 +14,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -27,6 +31,9 @@ import java.util.ArrayList;
 public class TableAdapter extends RecyclerView.Adapter<TableAdapter.TableViewHolder>{
     private Context context;
     private ArrayList<Table> tables;
+    private FirebaseDatabase database;
+    private DatabaseReference myRef;
+    String userId;
 
     public class TableViewHolder extends RecyclerView.ViewHolder{
         TextView tableName;
@@ -57,9 +64,12 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.TableViewHol
     }
 
 
-    public TableAdapter(Context _context, ArrayList<Table> tables) {
+    public TableAdapter(Context _context, ArrayList<Table> tables, String userId) {
+        this.userId = userId;
         context = _context;
         this.tables = tables;
+        database = FirebaseDatabase.getInstance();
+        myRef = database.getReference();
     }
 
     @Override
@@ -74,12 +84,28 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.TableViewHol
         Table t = tables.get(position);
         holder.tableName.setText(t.name);
         holder.tableRest.setText(t.restaurant.name);
-        Glide
-                .with(context)
-                .load(t.restaurant.photo)
-                .dontTransform()
-                .into(holder.tablePic);
         holder.table = t;
+        final TableViewHolder tempHolder = holder;
+        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                DataSnapshot userData = dataSnapshot.child("Users");
+                String url = null;
+                if(userData.child(userId).exists()) {
+                    User user = userData.child(userId).getValue(User.class);
+                    Glide
+                            .with(context)
+                            .load(user.getPic())
+                            .dontTransform()
+                            .into(tempHolder.tablePic);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
 

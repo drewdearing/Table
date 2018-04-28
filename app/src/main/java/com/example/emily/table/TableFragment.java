@@ -34,6 +34,7 @@ public class TableFragment extends Fragment {
     private DatabaseReference myRef;
     private TableAdapter adapter;
     private ActionBar actionBar;
+    private String userId;
 
 
     //Code from FCListRecyclerView
@@ -44,7 +45,7 @@ public class TableFragment extends Fragment {
         View v = inflater.inflate(R.layout.table_frag, container, false);
         recyclerView = (RecyclerView) v.findViewById(R.id.tableRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-
+        userId = getArguments().getString("userId");
 
         database = FirebaseDatabase.getInstance();
         myRef = database.getReference();
@@ -62,7 +63,7 @@ public class TableFragment extends Fragment {
                     Log.w(TAG, "added " + table.getName() + " to adapter");
                 }
 
-                adapter = new TableAdapter(container.getContext(), tables);
+                adapter = new TableAdapter(container.getContext(), tables, userId);
                 recyclerView.setAdapter(adapter);
             }
 

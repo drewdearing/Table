@@ -121,13 +121,15 @@ public class Login extends AppCompatActivity {
                     //do nothing?
                 } else {
                     //create User and put it in database
-                    User u = new User(p.getId(), p.getName(), p.getFirstName(), p.getProfilePictureUri(100,100));
+                    User u = new User(p.getId(), p.getName(), p.getFirstName(), p.getProfilePictureUri(500, 500).toString());
+                    Log.d("HELP URL", p.getProfilePictureUri(500, 500).toString());
                     Log.d("new user", u.getId() + u.getFirstName() + u.getName());
                     myRef.child("Users").child(u.getId()).setValue(u);
                 }
                 Intent goHome = new Intent(getApplicationContext(), Home.class);
                 Bundle b = new Bundle();
                 b.putString("id", p.getId());
+                Log.d("HELP LOGIN", ";ddsdsnoidnds");
                 goHome.putExtras(b);
                 startActivity(goHome);
             }
