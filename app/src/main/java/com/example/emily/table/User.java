@@ -10,7 +10,6 @@ public class User{
     private String id;
     private String name;
     private String firstName;
-    private ArrayList<String> tables;
     private String bio;
     private String pictureURL;
 

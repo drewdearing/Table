@@ -46,7 +46,6 @@
         android:layout_marginBottom="8dp"
         android:text="Join this table"
         app:layout_constraintBottom_toBottomOf="parent"
-        tools:layout_editor_absoluteX="0dp"
-        android:onClick="joinTable"/>
+        tools:layout_editor_absoluteX="0dp" />
 
 </android.support.constraint.ConstraintLayout>

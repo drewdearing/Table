@@ -28,6 +28,7 @@ public class Form extends AppCompatActivity {
     private String restaurantName;
     private String photoURL;
     private String userId;
+    private String key;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +52,7 @@ public class Form extends AppCompatActivity {
                 //need to handle user trees and random ids.
                 database = FirebaseDatabase.getInstance();
                 myRef = database.getReference();
-                String key = myRef.push().getKey();
+                key = myRef.push().getKey();
                 myRef.child("Tables").child(key).setValue(initTable());
                 onBackPressed();
             }
@@ -68,7 +69,7 @@ public class Form extends AppCompatActivity {
         Restaurant r = new Restaurant(restaurantName);
         r.photo = photoURL;
         //Create new table object
-        Table table = new Table(name, userId);
+        Table table = new Table(name, userId, key);
         table.description = desc;
         table.restaurant = r;
 

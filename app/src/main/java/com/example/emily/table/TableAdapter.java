@@ -33,7 +33,7 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.TableViewHol
     private ArrayList<Table> tables;
     private FirebaseDatabase database;
     private DatabaseReference myRef;
-    String userId;
+    private String userId;
 
     public class TableViewHolder extends RecyclerView.ViewHolder{
         TextView tableName;
@@ -57,6 +57,7 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.TableViewHol
                         Log.d("TableViewHolder onclick", "table is null");
                     }
                     intent.putExtra("Table", table);
+                    intent.putExtra("userId", userId);
                     v.getContext().startActivity(intent);
                 }
             });

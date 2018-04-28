@@ -15,19 +15,22 @@ public class Table implements Serializable{
     public Restaurant restaurant;
     public ArrayList<User> guests;
     public String userId;
+    public String tableId;
 
     public Table () {
         guests = new ArrayList<>();
     }
 
-    public Table (String name, String id) {
+    public Table (String name, String id, String tableId) {
         guests = new ArrayList<>();
         this.name = name;
         this.userId = id;
+        this.tableId = tableId;
     }
     public String getName() {return name;}
     public String getDescription() {return description; }
     public Restaurant getRestaurant() {return restaurant;}
     public ArrayList<User> getGuests() {return guests; }
     public String getUserId(){return userId;}
+    public String getTableId(){return tableId;}
 }
