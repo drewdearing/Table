@@ -9,10 +9,16 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.facebook.Profile;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 
 public class Home extends AppCompatActivity {
@@ -25,8 +31,10 @@ public class Home extends AppCompatActivity {
     private  Fragment findFragment;
     private  Fragment profileFragment;
     private  Fragment prevFragment;
-    private Profile p;
+    private User user = null;
     private ActionBar actionBar;
+    private FirebaseDatabase database;
+    private DatabaseReference myRef;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -81,33 +89,55 @@ public class Home extends AppCompatActivity {
         Intent activityThatCalled = getIntent();
         Bundle callingBundle = activityThatCalled.getExtras();
         if (callingBundle != null) {
-            p = callingBundle.getParcelable("Profile");
-            //mTextMessage.setText(p.getFirstName());
+            database = FirebaseDatabase.getInstance();
+            myRef = database.getReference();
+            final String id = callingBundle.getString("id");
+            myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    DataSnapshot Userdata = dataSnapshot.child("Users");
+                    if (Userdata.child(id).exists()) {
+                        user = Userdata.child(id).getValue(User.class);
+                    } else {
+                        Log.d("HELP", "CHILD DOESN'T EXIST");
+                        finish();
+                    }
+                    Log.d("HELP", user.getFirstName());
+                    //Create Fragments, copied from DemoListViewFrag
+                    startFragment = new RestaurantFragment();
+                    findFragment = new TableFragment();
+                    profileFragment = new ProfileFragment();
+                    actionBar.setTitle("Start a Table");
+                    FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                    ft.add(R.id.theFrame, startFragment, restaurantTag);
+                    ft.add(R.id.theFrame, findFragment, tableTag);
+                    ft.detach(findFragment);
+                    ft.add(R.id.theFrame, profileFragment, profileTag);
+                    ft.detach(profileFragment);
+                    ft.commit();
+                    prevFragment = startFragment;
+
+                    //Set Refreshing
+                    final SwipeRefreshLayout swipeLayout = findViewById(R.id.swipe_container);
+                    swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                        @Override
+                        public void onRefresh() {
+                            //Well do this later
+                            swipeLayout.setRefreshing(false);
+                        }
+                    });
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
         }
-
-        //Create Fragments, copied from DemoListViewFrag
-        startFragment = new RestaurantFragment();
-        findFragment = new TableFragment();
-        profileFragment = new ProfileFragment();
-        actionBar.setTitle("Start a Table");
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.add(R.id.theFrame, startFragment, restaurantTag);
-        ft.add(R.id.theFrame, findFragment, tableTag);
-        ft.detach(findFragment);
-        ft.add(R.id.theFrame, profileFragment, profileTag);
-        ft.detach(profileFragment);
-        ft.commit();
-        prevFragment = startFragment;
-
-        //Set Refreshing
-        final SwipeRefreshLayout swipeLayout = findViewById(R.id.swipe_container);
-        swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                //Well do this later
-                swipeLayout.setRefreshing(false);
-            }
-        });
+        else{
+            Log.d("HELP", "BUNDLE == NULL");
+            finish();
+        }
     }
 
 }
