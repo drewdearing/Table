@@ -43,7 +43,8 @@ public class Form extends AppCompatActivity {
                 //need to handle user trees and random ids.
                 database = FirebaseDatabase.getInstance();
                 myRef = database.getReference();
-                Table table = new Table();
+                Table table = new Table("test"+Math.random() * 1000);
+                table.description = "hi";
                 String key = myRef.push().getKey();
                 myRef.child("Tables").child(key).setValue(table);
                 onBackPressed();
