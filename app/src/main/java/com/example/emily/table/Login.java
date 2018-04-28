@@ -19,6 +19,11 @@ import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.Arrays;
 
@@ -29,6 +34,8 @@ public class Login extends AppCompatActivity {
     private AccessTokenTracker accessTokenTracker;
     private ProfileTracker profileTracker;
     protected LoginButton loginButton;
+    private FirebaseDatabase database;
+    private DatabaseReference myRef;
 
     //Facebook login button
     private FacebookCallback<LoginResult> callback = new FacebookCallback<LoginResult>() {
@@ -96,13 +103,39 @@ public class Login extends AppCompatActivity {
 
     private void login(Profile p) {
         if(p != null) {
+            checkUser(p);
             Log.d("Login", "Login(p)");
-            Intent goHome = new Intent(getApplicationContext(), Home.class);
-            Bundle b = new Bundle();
-            b.putParcelable("Profile", p);
-            goHome.putExtras(b);
-            startActivity(goHome);
+
         }
+    }
+
+    protected void checkUser(final Profile p) {
+        database = FirebaseDatabase.getInstance();
+        myRef = database.getReference();
+
+        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot data: dataSnapshot.getChildren()) {
+                    if (data.child(p.getId()).exists()) {
+                        //do nothing?
+                    } else {
+                        //create User and put it in database
+                        User u = new User(p.getId(), p.getName(), p.getFirstName(), p.getProfilePictureUri(100,100));
+                        Log.d("new user", u.getId() + u.getFirstName() + u.getName());
+                        myRef.child("Users").child(u.getId()).setValue(u);
+
+                    }
+                }
+                Intent goHome = new Intent(getApplicationContext(), Home.class);
+                startActivity(goHome);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     @Override
