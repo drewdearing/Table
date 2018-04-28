@@ -116,18 +116,19 @@ public class Login extends AppCompatActivity {
         myRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for(DataSnapshot data: dataSnapshot.getChildren()) {
-                    if (data.child(p.getId()).exists()) {
-                        //do nothing?
-                    } else {
-                        //create User and put it in database
-                        User u = new User(p.getId(), p.getName(), p.getFirstName(), p.getProfilePictureUri(100,100));
-                        Log.d("new user", u.getId() + u.getFirstName() + u.getName());
-                        myRef.child("Users").child(u.getId()).setValue(u);
-
-                    }
+                DataSnapshot Userdata = dataSnapshot.child("Users");
+                if (Userdata.child(p.getId()).exists()) {
+                    //do nothing?
+                } else {
+                    //create User and put it in database
+                    User u = new User(p.getId(), p.getName(), p.getFirstName(), p.getProfilePictureUri(100,100));
+                    Log.d("new user", u.getId() + u.getFirstName() + u.getName());
+                    myRef.child("Users").child(u.getId()).setValue(u);
                 }
                 Intent goHome = new Intent(getApplicationContext(), Home.class);
+                Bundle b = new Bundle();
+                b.putString("id", p.getId());
+                goHome.putExtras(b);
                 startActivity(goHome);
             }
 

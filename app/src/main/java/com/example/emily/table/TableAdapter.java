@@ -13,6 +13,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.util.ArrayList;
 
 /**
@@ -26,14 +29,17 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.TableViewHol
     private ArrayList<Table> tables;
 
     public class TableViewHolder extends RecyclerView.ViewHolder{
-        TextView theTextView;
-        ImageView theImageView;
+        TextView tableName;
+        ImageView tablePic;
+        TextView tableRest;
         Table table;
 
         public TableViewHolder(final View v) {
             super(v);
-            theTextView = (TextView) v.findViewById(R.id.table_row_text);
-            theImageView = (ImageView) v.findViewById(R.id.table_row_pic);
+            tableName = (TextView) v.findViewById(R.id.table_name);
+            tablePic = (ImageView) v.findViewById(R.id.table_pic);
+            tableRest = (TextView) v.findViewById(R.id.table_restaurant);
+
 
             //From RedFetch Homework
             v.setOnClickListener(new View.OnClickListener() {
@@ -66,7 +72,13 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.TableViewHol
     @Override
     public void onBindViewHolder(TableViewHolder holder, int position) {
         Table t = tables.get(position);
-        holder.theTextView.setText(t.name);
+        holder.tableName.setText(t.name);
+        holder.tableRest.setText(t.restaurant.name);
+        Glide
+                .with(context)
+                .load(t.restaurant.photo)
+                .dontTransform()
+                .into(holder.tablePic);
         holder.table = t;
     }
 
