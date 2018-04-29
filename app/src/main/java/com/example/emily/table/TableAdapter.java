@@ -95,7 +95,6 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.TableViewHol
                     DataSnapshot userData = dataSnapshot.child("Users");
                     if (userData.child(tableTemp.userId).exists()) {
                         User user = userData.child(tableTemp.userId).getValue(User.class);
-                        Log.d("HELP", user.getPic());
                         Glide
                                 .with(context)
                                 .load(user.getPic())
