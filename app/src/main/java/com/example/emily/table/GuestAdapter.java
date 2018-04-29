@@ -3,6 +3,7 @@ package com.example.emily.table;
 import android.content.Context;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,19 +20,23 @@ public class GuestAdapter extends RecyclerView.Adapter<GuestAdapter.GuestViewHol
 
     private Context context;
     private ArrayList<User> guests;
+    String tableOwner;
 
     public class GuestViewHolder extends RecyclerView.ViewHolder{
         TextView textView;
         ImageView imageView;
+        TextView desc;
 
         public GuestViewHolder(final View v) {
             super(v);
             textView = v.findViewById(R.id.guest_name);
+            desc = v.findViewById(R.id.guest_desc);
             imageView = v.findViewById(R.id.guest_pic);
         }
     }
 
-    public GuestAdapter(Context _context, ArrayList<User> guests) {
+    public GuestAdapter(Context _context, ArrayList<User> guests, String userId) {
+        tableOwner = userId;
         context = _context;
         this.guests = guests;
     }
@@ -47,6 +52,9 @@ public class GuestAdapter extends RecyclerView.Adapter<GuestAdapter.GuestViewHol
     public void onBindViewHolder(GuestAdapter.GuestViewHolder holder, int position) {
         User u = guests.get(position);
         holder.textView.setText(u.getName());
+        if(u.getId().equals(tableOwner)){
+            holder.desc.setText("Owner");
+        }
         Glide
                 .with(getApplicationContext())
                 .load(u.getPic())

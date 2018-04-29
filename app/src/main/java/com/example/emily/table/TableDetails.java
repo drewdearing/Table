@@ -32,6 +32,7 @@ public class TableDetails extends AppCompatActivity {
     private DatabaseReference myRef;
     private ArrayList<User> guests;
     private ArrayList<String> guestIds;
+    private boolean isOwner = false;
 
 
     @Override
@@ -46,28 +47,36 @@ public class TableDetails extends AppCompatActivity {
         actionBar = getSupportActionBar();
         actionBar.setTitle(table.getName());
         button = findViewById(R.id.details_button);
+        isOwner = currentUserId.equals(table.getUserId());
 
         initViews();
 
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                //Find user object in database
-                myRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        DataSnapshot userdata = dataSnapshot.child("Users").child(currentUserId);
+                if(!isOwner) {
+                    //Find user object in database
+                    myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            DataSnapshot userdata = dataSnapshot.child("Users").child(currentUserId);
 
-                        User user = userdata.getValue(User.class);
-                        //Add current user to the guest list
-                        myRef.child("Tables").child(table.getTableId()).child("Guests").child(currentUserId).setValue(currentUserId);
-                    }
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
+                            User user = userdata.getValue(User.class);
+                            //Add current user to the guest list
+                            myRef.child("Tables").child(table.getTableId()).child("Guests").child(currentUserId).setValue(currentUserId);
+                            Toast.makeText(getApplicationContext(), "Joined table", Toast.LENGTH_LONG).show();
+                            button.setEnabled(false);
+                            button.setText("Joined");
+                        }
 
-                    }
-                });
-                Toast.makeText(getApplicationContext(),"Joined table",Toast.LENGTH_LONG).show();
-                finish();
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {}
+                    });
+                }
+                else{
+                    myRef.child("Tables").child(table.getTableId()).removeValue();
+                    Toast.makeText(getApplicationContext(), "Removing table.", Toast.LENGTH_LONG).show();
+                    finish();
+                }
             }
         });
     }
@@ -77,6 +86,10 @@ public class TableDetails extends AppCompatActivity {
         TextView desc = findViewById(R.id.details_desc);
         desc.setMovementMethod(ScrollingMovementMethod.getInstance());
         desc.setText(table.getDescription());
+
+        if(isOwner){
+            button.setText("End Table");
+        }
 
         ImageView img = findViewById(R.id.details_image);
         String photoURL = table.getRestaurant().photo;
@@ -98,7 +111,7 @@ public class TableDetails extends AppCompatActivity {
                 for (DataSnapshot guestData : guestSnapShot.getChildren()) {
                     String userId = guestData.getKey();
                     //Hide button if the user is already on guest list
-                    if (userId.equals(currentUserId)) {
+                    if (!isOwner && userId.equals(currentUserId)) {
                         button.setEnabled(false);
                         button.setText("Joined");
                     }
@@ -112,7 +125,7 @@ public class TableDetails extends AppCompatActivity {
             public void onCancelled(DatabaseError error) { }
          });
 
-        GuestAdapter adapter = new GuestAdapter(this, guests);
+        GuestAdapter adapter = new GuestAdapter(this, guests, table.getUserId());
         recyclerView.setAdapter(adapter);
 
         Log.w("guest size", "" + guestIds.size());
