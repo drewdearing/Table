@@ -36,24 +36,7 @@ public class Login extends AppCompatActivity {
     private DatabaseReference myRef;
     private TextView textView;
     static final int LOG_OUT_REQUEST = 1;  // The request code
-
-    //Facebook login button
-    private FacebookCallback<LoginResult> callback = new FacebookCallback<LoginResult>() {
-        @Override
-        public void onSuccess(LoginResult loginResult) {
-            Log.d("Login", "default callback success");
-            Profile profile = Profile.getCurrentProfile();
-            login(profile);
-        }
-        @Override
-        public void onCancel() {
-
-        }
-        @Override
-        public void onError(FacebookException e) {
-
-        }
-    };
+    private FacebookCallback<LoginResult> callback;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,7 +90,6 @@ public class Login extends AppCompatActivity {
         if(p != null) {
             checkUser(p);
             Log.d("Login", "Login(p)");
-
         }
     }
 
@@ -148,8 +130,9 @@ public class Login extends AppCompatActivity {
     protected void onResume() {
         Log.d("Login", "onResume");
         super.onResume();
-        Profile profile = Profile.getCurrentProfile();
-        login(profile);
+//        Profile profile = Profile.getCurrentProfile();
+//        Log.w("onResume profile", profile.getName());
+//        login(profile);
     }
 
     @Override
