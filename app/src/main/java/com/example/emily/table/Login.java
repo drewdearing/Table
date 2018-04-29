@@ -25,8 +25,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.Arrays;
-
 
 public class Login extends AppCompatActivity {
 
@@ -36,6 +34,8 @@ public class Login extends AppCompatActivity {
     protected LoginButton loginButton;
     private FirebaseDatabase database;
     private DatabaseReference myRef;
+    private TextView textView;
+    static final int LOG_OUT_REQUEST = 1;  // The request code
 
     //Facebook login button
     private FacebookCallback<LoginResult> callback = new FacebookCallback<LoginResult>() {
@@ -60,6 +60,8 @@ public class Login extends AppCompatActivity {
         Log.d("Login", "onCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        textView = findViewById(R.id.login_message);
+        textView.setText("Welcome to Table!");
         FacebookSdk.sdkInitialize(getApplicationContext());
         callbackManager = CallbackManager.Factory.create();
         accessTokenTracker = new AccessTokenTracker() {
@@ -110,6 +112,7 @@ public class Login extends AppCompatActivity {
     }
 
     private void checkUser(final Profile p) {
+        textView.setText("Loading...");
         database = FirebaseDatabase.getInstance();
         myRef = database.getReference();
 
@@ -131,7 +134,7 @@ public class Login extends AppCompatActivity {
                 b.putString("id", p.getId());
                 Log.d("HELP LOGIN", ";ddsdsnoidnds");
                 goHome.putExtras(b);
-                startActivity(goHome);
+                startActivityForResult(goHome, LOG_OUT_REQUEST);
             }
 
             @Override
@@ -167,5 +170,10 @@ public class Login extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         callbackManager.onActivityResult(requestCode, resultCode, data);
         super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == LOG_OUT_REQUEST){
+            Log.w("TAG", "logged out");
+            textView.setText("Welcome to Table!");
+        }
     }
 }

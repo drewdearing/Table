@@ -10,8 +10,10 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
+import com.facebook.login.LoginManager;
 
 import com.facebook.Profile;
 import com.google.firebase.database.DataSnapshot;
@@ -23,7 +25,6 @@ import com.google.firebase.database.ValueEventListener;
 
 public class Home extends AppCompatActivity {
 
-    private TextView mTextMessage;
     private final String restaurantTag = "RestaurantFragment";
     private final String tableTag = "TableFragment";
     private final String profileTag = "Profile";
@@ -143,6 +144,26 @@ public class Home extends AppCompatActivity {
             Log.d("HELP", "BUNDLE == NULL");
             finish();
         }
+    }
+
+    // create an action bar button
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.log_out, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    // handle button activities
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.logout) {
+            // do something here
+            LoginManager.getInstance().logOut();
+            finish();
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 }

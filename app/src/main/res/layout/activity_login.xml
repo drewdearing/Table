@@ -8,11 +8,10 @@
     tools:context="com.example.emily.table.Login">
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/login_message"
         android:layout_width="wrap_content"
         android:layout_height="41dp"
         android:layout_marginBottom="24dp"
-        android:text="Welcome to Table!"
         android:textSize="30sp"
         app:layout_constraintBottom_toTopOf="@+id/login_button"
         app:layout_constraintLeft_toLeftOf="parent"
