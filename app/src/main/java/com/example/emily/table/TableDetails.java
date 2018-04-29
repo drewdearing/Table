@@ -5,6 +5,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -32,6 +33,7 @@ public class TableDetails extends AppCompatActivity {
     private ArrayList<User> guests;
     private ArrayList<String> guestIds;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,8 +48,6 @@ public class TableDetails extends AppCompatActivity {
         button = findViewById(R.id.details_button);
 
         initViews();
-
-
 
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -75,6 +75,7 @@ public class TableDetails extends AppCompatActivity {
     //Sets up all visible views as well as create the recycler view
     private void initViews() {
         TextView desc = findViewById(R.id.details_desc);
+        desc.setMovementMethod(ScrollingMovementMethod.getInstance());
         desc.setText(table.getDescription());
 
         ImageView img = findViewById(R.id.details_image);
