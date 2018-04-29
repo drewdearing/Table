@@ -79,6 +79,6 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle b) {
         super.onActivityCreated(b);
-        
+
     }
 }
