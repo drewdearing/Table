@@ -130,9 +130,9 @@ public class Login extends AppCompatActivity {
     protected void onResume() {
         Log.d("Login", "onResume");
         super.onResume();
-//        Profile profile = Profile.getCurrentProfile();
+        Profile profile = Profile.getCurrentProfile();
 //        Log.w("onResume profile", profile.getName());
-//        login(profile);
+        login(profile);
     }
 
     @Override
