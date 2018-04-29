@@ -1,5 +1,7 @@
 package com.example.emily.table;
 
+import android.util.Log;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -13,24 +15,22 @@ public class Table implements Serializable{
     public String name; //event or table name
     public String description;
     public Restaurant restaurant;
-    public ArrayList<User> guests;
     public String userId;
     public String tableId;
 
     public Table () {
-        guests = new ArrayList<>();
     }
 
     public Table (String name, String id, String tableId) {
-        guests = new ArrayList<>();
         this.name = name;
         this.userId = id;
         this.tableId = tableId;
+        Log.w("new table creAted", "new");
     }
     public String getName() {return name;}
     public String getDescription() {return description; }
     public Restaurant getRestaurant() {return restaurant;}
-    public ArrayList<User> getGuests() {return guests; }
     public String getUserId(){return userId;}
     public String getTableId(){return tableId;}
+
 }

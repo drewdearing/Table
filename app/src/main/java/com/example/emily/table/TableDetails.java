@@ -18,28 +18,38 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+
 public class TableDetails extends AppCompatActivity {
 
     private Table table;
     private String currentUserId;
     private Button button;
+    private ActionBar actionBar;
+    private FirebaseDatabase database;
+    private DatabaseReference myRef;
+    private ArrayList<User> guests;
+    private ArrayList<String> guestIds;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.table_details);
+
+        database = FirebaseDatabase.getInstance();
+        myRef = database.getReference();
         table = (Table) getIntent().getSerializableExtra("Table");
-        Log.w("table id", table.getTableId());
         currentUserId = getIntent().getExtras().getString("userId");
-        Log.w("current user id", currentUserId);
-        ActionBar actionBar = getSupportActionBar();
+        actionBar = getSupportActionBar();
         actionBar.setTitle(table.getName());
-        initViews();
         button = findViewById(R.id.details_button);
+
+        initViews();
+
+
+
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                FirebaseDatabase database = FirebaseDatabase.getInstance();
-                final DatabaseReference myRef = database.getReference();
                 //Find user object in database
                 myRef.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
@@ -48,8 +58,6 @@ public class TableDetails extends AppCompatActivity {
 
                         User user = userdata.getValue(User.class);
                         //Add current user to the guest list
-                        table.getGuests().add(user);
-                        //Update the database
 //                        myRef.child("Tables").child(table.getTableId()).child("Guests").child(currentUserId).setValue(user);
                         myRef.child("Tables").child(table.getTableId()).child("Guests").child(currentUserId).setValue(currentUserId);
                     }
@@ -62,6 +70,7 @@ public class TableDetails extends AppCompatActivity {
         });
     }
 
+    //Sets up all visible views as well as create the recycler view
     private void initViews() {
         TextView desc = findViewById(R.id.details_desc);
         desc.setText(table.getDescription());
@@ -76,8 +85,35 @@ public class TableDetails extends AppCompatActivity {
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.details_guest_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        GuestAdapter adapter = new GuestAdapter(this, table.getGuests());
+        guests = new ArrayList<>();
+        guestIds = new ArrayList<>();
+
+        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                DataSnapshot guestSnapShot = dataSnapshot.child("Tables").child(table.getTableId()).child("Guests");
+                for (DataSnapshot guestData : guestSnapShot.getChildren()) {
+                    String userId = guestData.getKey();
+                    //Hide button if the user is already on guest list
+                    if (userId.equals(currentUserId)) {
+                        button.setEnabled(false);
+                        button.setText("Joined");
+                    }
+                    guestIds.add(userId);
+                    User u = dataSnapshot.child("Users").child(userId).getValue(User.class);
+                    guests.add(u);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) { }
+         });
+
+        GuestAdapter adapter = new GuestAdapter(this, guests);
         recyclerView.setAdapter(adapter);
+
+        Log.w("guest size", "" + guestIds.size());
+
     }
 
 }

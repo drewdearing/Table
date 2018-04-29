@@ -15,8 +15,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class Form extends AppCompatActivity {
 
@@ -54,6 +57,8 @@ public class Form extends AppCompatActivity {
                 myRef = database.getReference();
                 key = myRef.push().getKey();
                 myRef.child("Tables").child(key).setValue(initTable());
+                //add creator onto the guest list
+                myRef.child("Tables").child(key).child("Guests").child(userId).setValue(userId);
                 onBackPressed();
             }
         });
@@ -68,11 +73,29 @@ public class Form extends AppCompatActivity {
         //Create Restaurant object
         Restaurant r = new Restaurant(restaurantName);
         r.photo = photoURL;
+
         //Create new table object
         Table table = new Table(name, userId, key);
         table.description = desc;
         table.restaurant = r;
-
+        addUser(table);
         return table;
+    }
+
+    private void addUser(final Table t){
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        final DatabaseReference myRef = database.getReference();
+
+        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                DataSnapshot userdata = dataSnapshot.child("Users").child(userId);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+            }
+        });
+
     }
 }
