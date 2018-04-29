@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.firebase.database.DataSnapshot;
@@ -58,7 +59,6 @@ public class TableDetails extends AppCompatActivity {
 
                         User user = userdata.getValue(User.class);
                         //Add current user to the guest list
-//                        myRef.child("Tables").child(table.getTableId()).child("Guests").child(currentUserId).setValue(user);
                         myRef.child("Tables").child(table.getTableId()).child("Guests").child(currentUserId).setValue(currentUserId);
                     }
                     @Override
@@ -66,6 +66,8 @@ public class TableDetails extends AppCompatActivity {
 
                     }
                 });
+                Toast.makeText(getApplicationContext(),"Joined table",Toast.LENGTH_LONG).show();
+                finish();
             }
         });
     }
