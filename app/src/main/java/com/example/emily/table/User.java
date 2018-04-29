@@ -21,6 +21,22 @@ public class User{
         this.bio = "";
     }
 
+    public User(String id, String name, String firstName, String pic, String bio) {
+        this.id = id;
+        this.pic = pic;
+        this.name = name;
+        this.firstName = firstName;
+        this.bio = bio;
+    }
+
+    public User(User u, String bio){
+        this.id = u.getId();
+        this.pic = u.getPic();
+        this.name = u.getName();
+        this.firstName = u.getFirstName();
+        this.bio = bio;
+    }
+
     public User(){}
 
     public String getId(){return id;}

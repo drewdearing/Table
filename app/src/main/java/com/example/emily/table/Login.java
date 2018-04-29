@@ -103,12 +103,19 @@ public class Login extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 DataSnapshot Userdata = dataSnapshot.child("Users");
                 if (Userdata.child(p.getId()).exists()) {
-                    //do nothing?
+                    User u = Userdata.child(p.getId()).getValue(User.class);
+                    User newUser = new User(p.getId(),
+                            p.getName(),
+                            p.getFirstName(),
+                            p.getProfilePictureUri(500, 500).toString(),
+                            u.getBio());
+                    myRef.child("Users").child(u.getId()).setValue(u);
                 } else {
                     //create User and put it in database
-                    User u = new User(p.getId(), p.getName(), p.getFirstName(), p.getProfilePictureUri(500, 500).toString());
-                    Log.d("HELP URL", p.getProfilePictureUri(500, 500).toString());
-                    Log.d("new user", u.getId() + u.getFirstName() + u.getName());
+                    User u = new User(p.getId(),
+                            p.getName(),
+                            p.getFirstName(),
+                            p.getProfilePictureUri(500, 500).toString());
                     myRef.child("Users").child(u.getId()).setValue(u);
                 }
                 Intent goHome = new Intent(getApplicationContext(), Home.class);

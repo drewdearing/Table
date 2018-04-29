@@ -1,5 +1,6 @@
 package com.example.emily.table;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
@@ -39,14 +40,14 @@ public class ProfileFragment extends Fragment {
     private FirebaseDatabase database;
     private DatabaseReference myRef;
     private TextView username;
-//    private TextView bio;
+    private TextView bioText;
+    private EditText bioEdit;
     private TextView tableHeader;
     private ImageView profilePic;
     private User user;
     private RecyclerView recyclerView;
     private TableAdapter adapter;
     private AppCompatButton button;
-    private EditText bio;
 
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container,
@@ -54,7 +55,8 @@ public class ProfileFragment extends Fragment {
         View v = inflater.inflate(R.layout.profile_frag, container, false);
         userId = getArguments().getString("userId");
         username = v.findViewById(R.id.usernameText);
-        bio = v.findViewById(R.id.bio);
+        bioEdit = v.findViewById(R.id.bioEdit);
+        bioText = v.findViewById(R.id.bioText);
         tableHeader = v.findViewById(R.id.tableHeader);
         profilePic = v.findViewById(R.id.profilePic);
         recyclerView = (RecyclerView) v.findViewById(R.id.profile_list);
@@ -91,12 +93,18 @@ public class ProfileFragment extends Fragment {
         button = v.findViewById(R.id.edit_button);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                bio.setEnabled(true);
+                bioEdit.setVisibility(View.VISIBLE);
+                bioText.setVisibility(View.GONE);
+                button.setVisibility(View.GONE);
+                bioEdit.requestFocus();
+                bioEdit.setSelection(bioEdit.getText().length());
+                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.showSoftInput(bioEdit, InputMethodManager.SHOW_IMPLICIT);
             }
         });
-        bio.setHorizontallyScrolling(false);
-        bio.setMaxLines(5);
-        bio.setOnEditorActionListener(new EditText.OnEditorActionListener() {
+        bioEdit.setHorizontallyScrolling(false);
+        bioEdit.setMaxLines(5);
+        bioEdit.setOnEditorActionListener(new EditText.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
@@ -104,7 +112,12 @@ public class ProfileFragment extends Fragment {
                     Log.w("action done", "pls");
                     InputMethodManager imm = (InputMethodManager)v.getContext().getSystemService(container.getContext().INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-                    bio.setEnabled(false);
+                    bioText.setText(bioEdit.getText());
+                    bioEdit.setVisibility(View.GONE);
+                    bioText.setVisibility(View.VISIBLE);
+                    user = new User(user, bioEdit.getText().toString());
+                    myRef.child("Users").child(user.getId()).setValue(user);
+                    button.setVisibility(View.VISIBLE);
                     return true;
                 }
                 return false;
@@ -116,7 +129,8 @@ public class ProfileFragment extends Fragment {
 
     private void setUserInfo(){
         username.setText(user.getName());
-        bio.setText(user.getBio());
+        bioText.setText(user.getBio());
+        bioEdit.setText(user.getBio());
         tableHeader.setText(user.getFirstName() + "'s Tables");
         Glide
                 .with(getContext())
