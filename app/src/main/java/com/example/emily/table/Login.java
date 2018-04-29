@@ -53,27 +53,24 @@ public class Login extends AppCompatActivity {
             }
         };
 
+        profileTracker = new ProfileTracker() {
+            @Override
+            protected void onCurrentProfileChanged(Profile oldProfile, Profile newProfile) {
+                Log.d("Login", "currentProfileChanged");
+                login(newProfile);
+            }
+        };
         accessTokenTracker.startTracking();
+        profileTracker.startTracking();
         loginButton = (LoginButton) findViewById(R.id.login_button);
         callback = new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
                 Log.d("Login", "loginbutton callback success");
                 AccessToken accessToken = loginResult.getAccessToken();
+                Profile profile = Profile.getCurrentProfile();
+                login(profile);
                 Toast.makeText(getApplicationContext(), "Logging in...", Toast.LENGTH_SHORT).show();
-                if(Profile.getCurrentProfile() == null){
-                    profileTracker = new ProfileTracker() {
-                        @Override
-                        protected void onCurrentProfileChanged(Profile oldProfile, Profile currentProfile) {
-                            Log.d("Login", "currentProfileChanged");
-                            login(currentProfile);
-                            profileTracker.stopTracking();
-                        }
-                    };
-                }
-                else {
-                    login(Profile.getCurrentProfile());
-                }
             }
 
             @Override
@@ -93,9 +90,6 @@ public class Login extends AppCompatActivity {
         if(p != null) {
             checkUser(p);
             Log.d("Login", "Login(p)");
-        }
-        else{
-            Log.d("Login", "Login(p) is null.");
         }
     }
 
@@ -151,13 +145,13 @@ public class Login extends AppCompatActivity {
     protected void onStop() {
         Log.d("Login", "onStop");
         super.onStop();
-
     }
 
     @Override
     protected void onDestroy(){
         super.onDestroy();
         accessTokenTracker.stopTracking();
+        profileTracker.stopTracking();
     }
 
     @Override
