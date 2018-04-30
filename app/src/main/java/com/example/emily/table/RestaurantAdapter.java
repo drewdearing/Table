@@ -35,6 +35,7 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Re
         b.putString("name", tableRestaurant.name);
         b.putString("photo", tableRestaurant.photo);
         b.putString("userId", userId);
+        b.putString("address", tableRestaurant.address);
         form.putExtras(b);
         mContext.startActivity(form);
     }

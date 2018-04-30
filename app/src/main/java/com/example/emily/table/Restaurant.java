@@ -12,6 +12,8 @@ public class Restaurant implements Serializable{
 
     public String photo;
 
+    public String address;
+
     public Restaurant () {}
 
     public Restaurant (String name) {
@@ -21,5 +23,7 @@ public class Restaurant implements Serializable{
     public String getName() {
         return name;
     }
+
+    public String getAddress() {return address;}
 
 }

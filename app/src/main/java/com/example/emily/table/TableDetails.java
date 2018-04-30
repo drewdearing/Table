@@ -91,6 +91,10 @@ public class TableDetails extends AppCompatActivity {
             button.setText("End Table");
         }
 
+        TextView address = findViewById(R.id.address);
+        address.setText(table.getRestaurant().getAddress());
+        Log.d("address in table detail", table.getRestaurant().getAddress());
+
         ImageView img = findViewById(R.id.details_image);
         String photoURL = table.getRestaurant().photo;
         Glide

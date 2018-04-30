@@ -25,7 +25,6 @@ public class Table implements Serializable{
         this.name = name;
         this.userId = id;
         this.tableId = tableId;
-        Log.w("new table creAted", "new");
     }
     public String getName() {return name;}
     public String getDescription() {return description; }

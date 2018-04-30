@@ -30,6 +30,7 @@ public class Form extends AppCompatActivity {
     private Button submitButton;
     private String restaurantName;
     private String photoURL;
+    private String address;
     private String userId;
     private String key;
 
@@ -42,6 +43,7 @@ public class Form extends AppCompatActivity {
         actionBar = getSupportActionBar();
         Intent restaurantInfo = getIntent();
         restaurantName = restaurantInfo.getExtras().getString("name");
+        address = restaurantInfo.getExtras().getString("address");
         photoURL = restaurantInfo.getExtras().getString("photo");
         userId = restaurantInfo.getExtras().getString("userId");
         actionBar.setTitle(restaurantName);
@@ -73,6 +75,7 @@ public class Form extends AppCompatActivity {
         //Create Restaurant object
         Restaurant r = new Restaurant(restaurantName);
         r.photo = photoURL;
+        r.address = address;
 
         //Create new table object
         Table table = new Table(name, userId, key);
