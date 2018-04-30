@@ -147,6 +147,10 @@ public class RestaurantFragment extends Fragment {
                     JSONObject entry = children.getJSONObject(i);
                     String name = entry.getString("name");
                     String address = entry.getString("vicinity");
+                    JSONObject geometry = entry.getJSONObject("geometry");//location is inside geometry object
+                    JSONObject location = geometry.getJSONObject("location");
+                    double lon = location.getDouble("lng");
+                    double lat = location.getDouble("lat");
                     JSONArray photos = entry.getJSONArray("photos");
                     JSONObject photo = photos.getJSONObject(0);
                     String photoRef = photo.getString("photo_reference");
@@ -155,7 +159,8 @@ public class RestaurantFragment extends Fragment {
                             +photoRef + "&maxwidth=" + maxWidth + "&key=" + api_key;
                     r.name = name;
                     r.address = address;
-                    Log.d("restaurant", r.address);
+                    r.lon = lon;
+                    r.lat = lat;
                     list.add(r);
                 }
                 catch (JSONException e){}

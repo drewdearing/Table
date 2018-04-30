@@ -33,6 +33,8 @@ public class Form extends AppCompatActivity {
     private String address;
     private String userId;
     private String key;
+    private double lon;
+    private double lat;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +46,8 @@ public class Form extends AppCompatActivity {
         Intent restaurantInfo = getIntent();
         restaurantName = restaurantInfo.getExtras().getString("name");
         address = restaurantInfo.getExtras().getString("address");
+        lat = restaurantInfo.getExtras().getDouble("lat");
+        lon = restaurantInfo.getExtras().getDouble("lon");
         photoURL = restaurantInfo.getExtras().getString("photo");
         userId = restaurantInfo.getExtras().getString("userId");
         actionBar.setTitle(restaurantName);
@@ -76,6 +80,8 @@ public class Form extends AppCompatActivity {
         Restaurant r = new Restaurant(restaurantName);
         r.photo = photoURL;
         r.address = address;
+        r.lon = lon;
+        r.lat = lat;
 
         //Create new table object
         Table table = new Table(name, userId, key);

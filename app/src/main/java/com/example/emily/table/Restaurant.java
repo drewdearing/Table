@@ -14,6 +14,10 @@ public class Restaurant implements Serializable{
 
     public String address;
 
+    public double lat;
+
+    public double lon;
+
     public Restaurant () {}
 
     public Restaurant (String name) {
@@ -26,4 +30,7 @@ public class Restaurant implements Serializable{
 
     public String getAddress() {return address;}
 
+    public double getLat() {return lat;}
+
+    public double getLon() {return lon;}
 }

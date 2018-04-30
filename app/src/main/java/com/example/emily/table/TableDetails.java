@@ -1,5 +1,7 @@
 package com.example.emily.table;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -7,6 +9,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -14,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.facebook.login.LoginManager;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -21,6 +26,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class TableDetails extends AppCompatActivity {
 
@@ -33,6 +39,8 @@ public class TableDetails extends AppCompatActivity {
     private ArrayList<User> guests;
     private ArrayList<String> guestIds;
     private boolean isOwner = false;
+    private double lat;
+    private double lon;
 
 
     @Override
@@ -134,6 +142,37 @@ public class TableDetails extends AppCompatActivity {
 
         Log.w("guest size", "" + guestIds.size());
 
+    }
+
+    // create an action bar button
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.maps, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    // handle button activities
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.map) {
+            //open Google Maps
+            lat = table.getRestaurant().getLat();
+            lon = table.getRestaurant().getLon();
+            // This looks weird, not accurate
+            // String uri = String.format(Locale.ENGLISH, "geo:%f,%f", lat, lon);
+
+            // This makes the title lat and lon instead of restaurant name
+            // String uri = "http://maps.google.com/maps?q=loc:" + lat + "," + lon;
+
+            //This uses address and looks the best, but not as accurate
+            String uri = "http://maps.google.co.in/maps?q=" + table.getRestaurant().getAddress();
+            Intent maps = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+            startActivity(maps);
+            finish();
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 }
