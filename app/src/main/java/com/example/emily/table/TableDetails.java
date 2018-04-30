@@ -125,7 +125,7 @@ public class TableDetails extends AppCompatActivity {
             public void onCancelled(DatabaseError error) { }
          });
 
-        GuestAdapter adapter = new GuestAdapter(this, guests, table.getUserId());
+        GuestAdapter adapter = new GuestAdapter(this, guests, table.getUserId(), currentUserId);
         recyclerView.setAdapter(adapter);
 
         Log.w("guest size", "" + guestIds.size());

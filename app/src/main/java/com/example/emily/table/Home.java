@@ -32,10 +32,12 @@ public class Home extends AppCompatActivity {
     private  Fragment findFragment;
     private  Fragment profileFragment;
     private  Fragment prevFragment;
-    private User user = null;
+    private String userId;
+    private String profileId;
     private ActionBar actionBar;
     private FirebaseDatabase database;
     private DatabaseReference myRef;
+    private BottomNavigationView navigation;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -67,10 +69,15 @@ public class Home extends AppCompatActivity {
         // Start Fragment transactions
         ft = getSupportFragmentManager().beginTransaction();
         ft.detach(prevFragment);
+        Bundle bundle = new Bundle();
+        bundle.putString("userId", userId);
+        bundle.putString("profileId", profileId);
+        fragment.setArguments(bundle);
         ft.attach(fragment);
         // TRANSIT_FRAGMENT_FADE calls for the Fragment to fade away
         ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
         ft.commit();
+        profileId = userId;
     }
 
     @Override
@@ -78,12 +85,10 @@ public class Home extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        //mTextMessage = (TextView) findViewById(R.id.message);
-
         actionBar = getSupportActionBar();
 
         //Init Bottom Navigation
-        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+        navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         // Get the user's profile
@@ -92,51 +97,35 @@ public class Home extends AppCompatActivity {
         if (callingBundle != null) {
             database = FirebaseDatabase.getInstance();
             myRef = database.getReference();
-            final String id = callingBundle.getString("id");
-            myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            userId = callingBundle.getString("id");
+            profileId = userId;
+            String profileId = callingBundle.getString("profileId");
+            Bundle userBundle = new Bundle();
+            userBundle.putString("userId", userId);
+            //Create Fragments, copied from DemoListViewFrag
+            startFragment = new RestaurantFragment();
+            startFragment.setArguments(userBundle);
+            findFragment = new TableFragment();
+            profileFragment = new ProfileFragment();
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.add(R.id.theFrame, startFragment, restaurantTag);
+            ft.add(R.id.theFrame, findFragment, tableTag);
+            ft.detach(findFragment);
+            ft.add(R.id.theFrame, profileFragment, profileTag);
+            ft.detach(profileFragment);
+            ft.commit();
+            prevFragment = startFragment;
+            if(profileId != null)
+                openProfile(profileId);
+
+
+            //Set Refreshing
+            final SwipeRefreshLayout swipeLayout = findViewById(R.id.swipe_container);
+            swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
                 @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    DataSnapshot Userdata = dataSnapshot.child("Users");
-                    if (Userdata.child(id).exists()) {
-                        user = Userdata.child(id).getValue(User.class);
-                    } else {
-                        Log.d("HELP", "CHILD DOESN'T EXIST");
-                        finish();
-                    }
-                    Log.d("HELP", user.getFirstName());
-                    //Create Fragments, copied from DemoListViewFrag
-                    Bundle b = new Bundle();
-                    b.putString("userId", user.getId());
-                    startFragment = new RestaurantFragment();
-                    startFragment.setArguments(b);
-                    findFragment = new TableFragment();
-                    findFragment.setArguments(b);
-                    profileFragment = new ProfileFragment();
-                    profileFragment.setArguments(b);
-                    actionBar.setTitle("Start a Table");
-                    FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-                    ft.add(R.id.theFrame, startFragment, restaurantTag);
-                    ft.add(R.id.theFrame, findFragment, tableTag);
-                    ft.detach(findFragment);
-                    ft.add(R.id.theFrame, profileFragment, profileTag);
-                    ft.detach(profileFragment);
-                    ft.commit();
-                    prevFragment = startFragment;
-
-                    //Set Refreshing
-                    final SwipeRefreshLayout swipeLayout = findViewById(R.id.swipe_container);
-                    swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-                        @Override
-                        public void onRefresh() {
-                            //Well do this later
-                            swipeLayout.setRefreshing(false);
-                        }
-                    });
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
+                public void onRefresh() {
+                    //Well do this later
+                    swipeLayout.setRefreshing(false);
                 }
             });
         }
@@ -144,6 +133,11 @@ public class Home extends AppCompatActivity {
             Log.d("HELP", "BUNDLE == NULL");
             finish();
         }
+    }
+
+    public void openProfile(String profile_id){
+        profileId = profile_id;
+        navigation.setSelectedItemId(R.id.profile);
     }
 
     // create an action bar button
