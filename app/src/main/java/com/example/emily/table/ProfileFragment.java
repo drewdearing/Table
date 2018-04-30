@@ -37,6 +37,7 @@ import java.util.ArrayList;
 public class ProfileFragment extends Fragment {
     private ActionBar actionBar;
     private String userId;
+    private String profileId;
     private FirebaseDatabase database;
     private DatabaseReference myRef;
     private TextView username;
@@ -54,6 +55,11 @@ public class ProfileFragment extends Fragment {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.profile_frag, container, false);
         userId = getArguments().getString("userId");
+        profileId = getArguments().getString("profileId");
+        if(profileId == null){
+            profileId = userId;
+        }
+        Log.d("PROFILE", profileId);
         username = v.findViewById(R.id.usernameText);
         bioEdit = v.findViewById(R.id.bioEdit);
         bioText = v.findViewById(R.id.bioText);
@@ -68,8 +74,8 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 DataSnapshot Userdata = dataSnapshot.child("Users");
-                if (Userdata.child(userId).exists()) {
-                    user = Userdata.child(userId).getValue(User.class);
+                if (Userdata.child(profileId).exists()) {
+                    user = Userdata.child(profileId).getValue(User.class);
                     setUserInfo();
                 }
 
@@ -78,10 +84,10 @@ public class ProfileFragment extends Fragment {
                 DataSnapshot tableSnapShot = dataSnapshot.child("Tables");
                 for(DataSnapshot tableData : tableSnapShot.getChildren()) {
                     Table table = tableData.getValue(Table.class);
-                    if (table.getUserId().equals(userId))
+                    if (table.getUserId().equals(profileId))
                         tables.add(table);
                 }
-                adapter = new TableAdapter(container.getContext(), tables, userId);
+                adapter = new TableAdapter(container.getContext(), tables, profileId);
                 recyclerView.setAdapter(adapter);
             }
 
@@ -89,19 +95,25 @@ public class ProfileFragment extends Fragment {
             public void onCancelled(DatabaseError databaseError) {}
         });
 
-
         button = v.findViewById(R.id.edit_button);
-        button.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                bioEdit.setVisibility(View.VISIBLE);
-                bioText.setVisibility(View.GONE);
-                button.setVisibility(View.GONE);
-                bioEdit.requestFocus();
-                bioEdit.setSelection(bioEdit.getText().length());
-                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.showSoftInput(bioEdit, InputMethodManager.SHOW_IMPLICIT);
-            }
-        });
+
+        if(!userId.equals(profileId)) {
+            button.setEnabled(false);
+            button.setVisibility(View.GONE);
+        }
+        else {
+            button.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    bioEdit.setVisibility(View.VISIBLE);
+                    bioText.setVisibility(View.GONE);
+                    button.setVisibility(View.GONE);
+                    bioEdit.requestFocus();
+                    bioEdit.setSelection(bioEdit.getText().length());
+                    InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.showSoftInput(bioEdit, InputMethodManager.SHOW_IMPLICIT);
+                }
+            });
+        }
         bioEdit.setHorizontallyScrolling(false);
         bioEdit.setMaxLines(5);
         bioEdit.setOnEditorActionListener(new EditText.OnEditorActionListener() {

@@ -1,7 +1,9 @@
 package com.example.emily.table;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,8 +23,9 @@ public class GuestAdapter extends RecyclerView.Adapter<GuestAdapter.GuestViewHol
     private Context context;
     private ArrayList<User> guests;
     String tableOwner;
+    String viewerId;
 
-    public class GuestViewHolder extends RecyclerView.ViewHolder{
+    public class GuestViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         TextView textView;
         ImageView imageView;
         TextView desc;
@@ -32,11 +35,28 @@ public class GuestAdapter extends RecyclerView.Adapter<GuestAdapter.GuestViewHol
             textView = v.findViewById(R.id.guest_name);
             desc = v.findViewById(R.id.guest_desc);
             imageView = v.findViewById(R.id.guest_pic);
+            v.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            launchProfile(getAdapterPosition());
         }
     }
 
-    public GuestAdapter(Context _context, ArrayList<User> guests, String userId) {
-        tableOwner = userId;
+    private void launchProfile(int position){
+        User u = guests.get(position);
+        Intent intent = new Intent(context, Home.class);
+        Bundle b = new Bundle();
+        b.putString("profileId", u.getId());
+        b.putString("id", viewerId);
+        intent.putExtras(b);
+        context.startActivity(intent);
+    }
+
+    public GuestAdapter(Context _context, ArrayList<User> guests, String owner, String viewer) {
+        tableOwner = owner;
+        viewerId = viewer;
         context = _context;
         this.guests = guests;
     }
