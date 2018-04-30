@@ -108,7 +108,6 @@ public class ProfileFragment extends Fragment {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    //something
                     Log.w("action done", "pls");
                     InputMethodManager imm = (InputMethodManager)v.getContext().getSystemService(container.getContext().INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
