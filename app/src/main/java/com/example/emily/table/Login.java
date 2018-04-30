@@ -124,6 +124,7 @@ public class Login extends AppCompatActivity {
                 Log.d("HELP LOGIN", ";ddsdsnoidnds");
                 goHome.putExtras(b);
                 startActivityForResult(goHome, LOG_OUT_REQUEST);
+                finish();
             }
 
             @Override
@@ -170,5 +171,11 @@ public class Login extends AppCompatActivity {
             Log.w("TAG", "logged out");
             textView.setText("Welcome to Table!");
         }
+    }
+
+    @Override
+    public void onBackPressed()
+    {
+        finish();
     }
 }

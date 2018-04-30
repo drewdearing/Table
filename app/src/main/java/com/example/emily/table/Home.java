@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
@@ -155,7 +156,14 @@ public class Home extends AppCompatActivity {
         if (id == R.id.logout) {
             // do something here
             LoginManager.getInstance().logOut();
+            //clear backstack
+            FragmentManager fm = getSupportFragmentManager();
+            for(int i = 0; i < fm.getBackStackEntryCount(); ++i) {
+                fm.popBackStack();
+            }
             finish();
+            Intent intent = new Intent(this,Login.class);
+            startActivity(intent);
         }
         return super.onOptionsItemSelected(item);
     }

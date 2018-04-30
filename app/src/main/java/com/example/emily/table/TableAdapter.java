@@ -1,5 +1,6 @@
 package com.example.emily.table;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -59,6 +60,7 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.TableViewHol
                     intent.putExtra("Table", table);
                     intent.putExtra("userId", userId);
                     v.getContext().startActivity(intent);
+                    ((Activity)context).finish();
                 }
             });
         }
