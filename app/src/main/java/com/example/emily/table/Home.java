@@ -40,6 +40,7 @@ public class Home extends AppCompatActivity {
     private static boolean isDebug = true;
     private DatabaseReference myRef;
     private BottomNavigationView navigation;
+    private int prevLayoutId;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -50,14 +51,17 @@ public class Home extends AppCompatActivity {
                 case R.id.start:
                     showFragment(startFragment, restaurantTag);
                     prevFragment = startFragment;
+                    prevLayoutId = R.id.start;
                     return true;
                 case R.id.find:
                     showFragment(findFragment, tableTag);
                     prevFragment = findFragment;
+                    prevLayoutId = R.id.find;
                     return true;
                 case R.id.profile:
                     showFragment(profileFragment, profileTag);
                     prevFragment = profileFragment;
+                    prevLayoutId = R.id.profile;
                     return true;
             }
             return false;
@@ -117,6 +121,7 @@ public class Home extends AppCompatActivity {
             ft.detach(profileFragment);
             ft.commit();
             prevFragment = startFragment;
+            prevLayoutId = R.id.start;
             if(profileId != null)
                 openProfile(profileId);
 
@@ -126,7 +131,7 @@ public class Home extends AppCompatActivity {
             swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
                 @Override
                 public void onRefresh() {
-                    //Well do this later
+                    navigation.setSelectedItemId(prevLayoutId);
                     swipeLayout.setRefreshing(false);
                 }
             });
