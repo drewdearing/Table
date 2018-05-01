@@ -166,14 +166,11 @@ public class Home extends AppCompatActivity {
         if (id == R.id.logout) {
             // do something here
             LoginManager.getInstance().logOut();
-            //clear backstack
-            FragmentManager fm = getSupportFragmentManager();
-            for(int i = 0; i < fm.getBackStackEntryCount(); ++i) {
-                fm.popBackStack();
-            }
-            finish();
             Intent intent = new Intent(this,Login.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
+            finish();
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }

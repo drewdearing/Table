@@ -54,7 +54,6 @@ public class GuestAdapter extends RecyclerView.Adapter<GuestAdapter.GuestViewHol
         b.putString("id", viewerId);
         intent.putExtras(b);
         context.startActivity(intent);
-        ((Activity)context).finish();
     }
 
     public GuestAdapter(Context _context, ArrayList<User> guests, String owner, String viewer) {

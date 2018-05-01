@@ -54,9 +54,6 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.TableViewHol
                 @Override
                 public void onClick(View view) {
                     Intent intent = new Intent(context, TableDetails.class);
-                    if (table == null) {
-                        Log.d("TableViewHolder onclick", "table is null");
-                    }
                     intent.putExtra("Table", table);
                     intent.putExtra("userId", userId);
                     v.getContext().startActivity(intent);

@@ -3,6 +3,7 @@ package com.example.emily.table;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -85,6 +86,20 @@ public class TableDetails extends AppCompatActivity {
                 }
             }
         });
+
+        //Set Refreshing
+        final SwipeRefreshLayout swipeLayout = findViewById(R.id.swipe_container);
+        swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                Intent intent = new Intent(getApplicationContext(), TableDetails.class);
+                intent.putExtra("Table", table);
+                intent.putExtra("userId", currentUserId);
+                startActivity(intent);
+                finish();
+                swipeLayout.setRefreshing(false);
+            }
+        });
     }
 
     //Sets up all visible views as well as create the recycler view
@@ -158,13 +173,6 @@ public class TableDetails extends AppCompatActivity {
             //open Google Maps
             lat = table.getRestaurant().getLat();
             lon = table.getRestaurant().getLon();
-            // This looks weird, not accurate
-            // String uri = String.format(Locale.ENGLISH, "geo:%f,%f", lat, lon);
-
-            // This makes the title lat and lon instead of restaurant name
-            // String uri = "http://maps.google.com/maps?q=loc:" + lat + "," + lon;
-
-            //This uses address and looks the best, but not as accurate
             String uri = "http://maps.google.co.in/maps?q=" + table.getRestaurant().getAddress();
             Intent maps = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
             startActivity(maps);
