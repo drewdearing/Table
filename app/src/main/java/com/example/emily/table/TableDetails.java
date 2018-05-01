@@ -1,5 +1,6 @@
 package com.example.emily.table;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -39,6 +40,8 @@ public class TableDetails extends AppCompatActivity {
     private DatabaseReference myRef;
     private ArrayList<User> guests;
     private ArrayList<String> guestIds;
+    private GuestAdapter adapter;
+    private RecyclerView recyclerView;
     private boolean isOwner = false;
     private double lat;
     private double lon;
@@ -92,11 +95,7 @@ public class TableDetails extends AppCompatActivity {
         swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                Intent intent = new Intent(getApplicationContext(), TableDetails.class);
-                intent.putExtra("Table", table);
-                intent.putExtra("userId", currentUserId);
-                startActivity(intent);
-                finish();
+                initViews();
                 swipeLayout.setRefreshing(false);
             }
         });
@@ -124,11 +123,11 @@ public class TableDetails extends AppCompatActivity {
                 .dontTransform()
                 .into(img);
 
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.details_guest_list);
+        recyclerView = (RecyclerView) findViewById(R.id.details_guest_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         guests = new ArrayList<>();
         guestIds = new ArrayList<>();
-
+        final Context context = this;
         myRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -144,14 +143,13 @@ public class TableDetails extends AppCompatActivity {
                     User u = dataSnapshot.child("Users").child(userId).getValue(User.class);
                     guests.add(u);
                 }
+                adapter = new GuestAdapter(context, guests, table.getUserId(), currentUserId);
+                recyclerView.setAdapter(adapter);
             }
 
             @Override
             public void onCancelled(DatabaseError error) { }
          });
-
-        GuestAdapter adapter = new GuestAdapter(this, guests, table.getUserId(), currentUserId);
-        recyclerView.setAdapter(adapter);
 
         Log.w("guest size", "" + guestIds.size());
 
