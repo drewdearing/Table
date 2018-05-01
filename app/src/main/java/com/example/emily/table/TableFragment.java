@@ -140,4 +140,11 @@ public class TableFragment extends Fragment {
         actionBar = ((AppCompatActivity)getActivity()).getSupportActionBar();
         actionBar.setTitle("Find a Table");
     }
+
+    @Override
+    protected void onResume() {
+        Log.d("Login", "onResume");
+        super.onResume();
+        getCurrentLocation();
+    }
 }
