@@ -2,6 +2,7 @@ package com.example.emily.table;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -86,6 +87,14 @@ public class ProfileFragment extends Fragment {
                     Table table = tableData.getValue(Table.class);
                     if (table.getUserId().equals(profileId))
                         tables.add(table);
+                    else{
+                        DataSnapshot guestData = tableData.child("Guests");
+                        for(DataSnapshot guest : guestData.getChildren()){
+                            if(guest.getKey().equals(profileId)){
+                                tables.add(table);
+                            }
+                        }
+                    }
                 }
                 adapter = new TableAdapter(container.getContext(), tables, profileId);
                 recyclerView.setAdapter(adapter);
