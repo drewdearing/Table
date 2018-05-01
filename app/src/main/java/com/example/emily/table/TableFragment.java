@@ -142,7 +142,7 @@ public class TableFragment extends Fragment {
     }
 
     @Override
-    protected void onResume() {
+    public void onResume() {
         Log.d("Login", "onResume");
         super.onResume();
         getCurrentLocation();

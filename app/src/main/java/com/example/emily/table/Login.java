@@ -94,7 +94,7 @@ public class Login extends AppCompatActivity {
     }
 
     private void checkUser(final Profile p) {
-        textView.setText("Loading...");
+//        textView.setText("Loading...");
         database = FirebaseDatabase.getInstance();
         myRef = database.getReference();
 
