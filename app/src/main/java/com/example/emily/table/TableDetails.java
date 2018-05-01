@@ -54,6 +54,7 @@ public class TableDetails extends AppCompatActivity {
         currentUserId = getIntent().getExtras().getString("userId");
         actionBar = getSupportActionBar();
         actionBar.setTitle(table.getName());
+        actionBar.setDisplayHomeAsUpEnabled(true);
         button = findViewById(R.id.details_button);
         isOwner = currentUserId.equals(table.getUserId());
 
@@ -167,8 +168,13 @@ public class TableDetails extends AppCompatActivity {
             String uri = "http://maps.google.co.in/maps?q=" + table.getRestaurant().getAddress();
             Intent maps = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
             startActivity(maps);
-            finish();
+            return true;
         }
+        else if (id == android.R.id.home) {
+            onBackPressed();
+            return true;
+        }
+
         return super.onOptionsItemSelected(item);
     }
 

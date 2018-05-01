@@ -8,6 +8,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatEditText;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -51,6 +52,7 @@ public class Form extends AppCompatActivity {
         photoURL = restaurantInfo.getExtras().getString("photo");
         userId = restaurantInfo.getExtras().getString("userId");
         actionBar.setTitle(restaurantName);
+        actionBar.setDisplayHomeAsUpEnabled(true);
         Glide
                 .with(getApplicationContext())
                 .load(photoURL)
@@ -106,5 +108,16 @@ public class Form extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == android.R.id.home) {
+            onBackPressed();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
