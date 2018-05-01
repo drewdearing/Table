@@ -39,6 +39,7 @@ public class TableFragment extends Fragment {
     private FirebaseDatabase database;
     private DatabaseReference myRef;
     private TableAdapter adapter;
+    private boolean isDebug;
     private ActionBar actionBar;
     private String userId;
     private Location userLocation;
@@ -54,7 +55,7 @@ public class TableFragment extends Fragment {
         recyclerView = (RecyclerView) v.findViewById(R.id.tableRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         userId = getArguments().getString("userId");
-
+        isDebug = ((Home) getActivity()).isDebug();
         //get current user location
         getCurrentLocation();
 
@@ -99,19 +100,6 @@ public class TableFragment extends Fragment {
         double distance = userLocation.distanceTo(otherLocation);
         return distance < 5000;
 
-//haverSign formula to calculate distance between long and lat
-//        double currLat = userLocation.getLatitude();
-//        double currLon = userLocation.getLongitude();
-//        double earthRadius = 6371000; //meters
-//        double dLat = Math.toRadians(currLat-lat1);
-//        double dLng = Math.toRadians(currLon-lng1);
-//        double a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-//                Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(currLat)) *
-//                            Math.sin(dLng/2) * Math.sin(dLng/2);
-//        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-//        float dist = (float) (earthRadius * c);
-//
-//        return dist < 1000;
     }
 
     private void getCurrentLocation() {
@@ -131,6 +119,11 @@ public class TableFragment extends Fragment {
                             }
                         }
                     });
+        }
+        if(userLocation == null && isDebug){
+            userLocation = new Location("currentLocation");
+            userLocation.setLatitude(30.286253);
+            userLocation.setLongitude(-97.7386227);
         }
     }
 

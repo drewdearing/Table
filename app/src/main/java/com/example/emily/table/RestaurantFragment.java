@@ -42,9 +42,9 @@ public class RestaurantFragment extends Fragment {
 
     static String api_key = "AIzaSyDB1j3umaGyjXOMFf7ECjZIsjipT5eHPUM";
     static int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
-    private static boolean isDebug = true;
     private FusedLocationProviderClient mFusedLocationClient;
     private RequestQueue requestQueue;
+    private boolean isDebug;
     private ArrayList<Restaurant> restList;
     private Location userLocation = null;
     private RecyclerView rv;
@@ -63,6 +63,7 @@ public class RestaurantFragment extends Fragment {
         requestQueue = Volley.newRequestQueue(getActivity());
         queryPlaces();
         userId = getArguments().getString("userId");
+        isDebug = ((Home) getActivity()).isDebug();
         return v;
     }
 

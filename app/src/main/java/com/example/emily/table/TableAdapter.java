@@ -60,7 +60,6 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.TableViewHol
                     intent.putExtra("Table", table);
                     intent.putExtra("userId", userId);
                     v.getContext().startActivity(intent);
-                    ((Activity)context).finish();
                 }
             });
         }

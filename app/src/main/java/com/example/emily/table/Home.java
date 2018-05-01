@@ -37,6 +37,7 @@ public class Home extends AppCompatActivity {
     private String profileId;
     private ActionBar actionBar;
     private FirebaseDatabase database;
+    private static boolean isDebug = true;
     private DatabaseReference myRef;
     private BottomNavigationView navigation;
 
@@ -134,6 +135,10 @@ public class Home extends AppCompatActivity {
             Log.d("HELP", "BUNDLE == NULL");
             finish();
         }
+    }
+
+    public boolean isDebug(){
+        return isDebug;
     }
 
     public void openProfile(String profile_id){
