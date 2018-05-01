@@ -21,8 +21,8 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Home"
-            android:label="@string/title_activity_home"></activity>
+        android:name=".Home"
+        android:label="@string/title_activity_home"></activity>
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
@@ -46,6 +46,7 @@
         </activity>
         <activity android:name=".Form" />
         <activity android:name=".TableDetails" />
+        <activity android:name=".ExternalProfile"></activity>
 
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.

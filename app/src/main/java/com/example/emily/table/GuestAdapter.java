@@ -47,11 +47,10 @@ public class GuestAdapter extends RecyclerView.Adapter<GuestAdapter.GuestViewHol
 
     private void launchProfile(int position){
         User u = guests.get(position);
-        Intent intent = new Intent(context, Home.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         Bundle b = new Bundle();
         b.putString("profileId", u.getId());
         b.putString("id", viewerId);
+        Intent intent = new Intent(context, ExternalProfile.class);
         intent.putExtras(b);
         context.startActivity(intent);
     }

@@ -83,13 +83,12 @@ public class Home extends AppCompatActivity {
         // TRANSIT_FRAGMENT_FADE calls for the Fragment to fade away
         ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
         ft.commit();
-        profileId = userId;
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.activity_home);
 
         actionBar = getSupportActionBar();
 
@@ -105,7 +104,6 @@ public class Home extends AppCompatActivity {
             myRef = database.getReference();
             userId = callingBundle.getString("id");
             profileId = userId;
-            String profileId = callingBundle.getString("profileId");
             Bundle userBundle = new Bundle();
             userBundle.putString("userId", userId);
             //Create Fragments, copied from DemoListViewFrag
@@ -122,8 +120,6 @@ public class Home extends AppCompatActivity {
             ft.commit();
             prevFragment = startFragment;
             prevLayoutId = R.id.start;
-            if(profileId != null)
-                openProfile(profileId);
 
 
             //Set Refreshing
@@ -144,11 +140,6 @@ public class Home extends AppCompatActivity {
 
     public boolean isDebug(){
         return isDebug;
-    }
-
-    public void openProfile(String profile_id){
-        profileId = profile_id;
-        navigation.setSelectedItemId(R.id.profile);
     }
 
     // create an action bar button
