@@ -66,9 +66,6 @@ public class TableDetails extends AppCompatActivity {
                     myRef.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
-                            DataSnapshot userdata = dataSnapshot.child("Users").child(currentUserId);
-
-                            User user = userdata.getValue(User.class);
                             //Add current user to the guest list
                             myRef.child("Tables").child(table.getTableId()).child("Guests").child(currentUserId).setValue(currentUserId);
                             Toast.makeText(getApplicationContext(), "Joined table", Toast.LENGTH_LONG).show();
