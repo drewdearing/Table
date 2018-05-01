@@ -75,6 +75,7 @@ public class TableDetails extends AppCompatActivity {
                             myRef.child("Tables").child(table.getTableId()).child("Guests").child(currentUserId).setValue(currentUserId);
                             Toast.makeText(getApplicationContext(), "Joined table", Toast.LENGTH_LONG).show();
                             button.setEnabled(false);
+                            initViews();
                             button.setText("Joined");
                         }
 

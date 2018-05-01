@@ -96,7 +96,7 @@ public class ProfileFragment extends Fragment {
                         }
                     }
                 }
-                adapter = new TableAdapter(container.getContext(), tables, profileId);
+                adapter = new TableAdapter(container.getContext(), tables, userId);
                 recyclerView.setAdapter(adapter);
             }
 
