@@ -11,7 +11,7 @@
         android:id="@+id/background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:srcCompat="@drawable/wood_background"
+        app:srcCompat = "@drawable/wood_background"
         android:adjustViewBounds="true"
         android:scaleType="centerCrop"/>
 
@@ -22,11 +22,12 @@
         android:layout_marginEnd="24dp"
         android:layout_marginStart="24dp"
         android:layout_marginTop="8dp"
+        app:srcCompat = "@drawable/table_header"
         app:layout_constraintBottom_toTopOf="@+id/login_message"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/background"
-        app:srcCompat="@drawable/table_header" />
+         />
 
     <TextView
         android:id="@+id/login_message"
