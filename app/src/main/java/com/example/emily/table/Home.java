@@ -144,7 +144,8 @@ public class Home extends AppCompatActivity {
                 }
             });
 
-            //Location Services
+            //Enable Location Services
+            //code from https://developer.android.com/training/location/change-location-settings
             createLocationRequest();
             LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
                     .addLocationRequest(mLocationRequest);
