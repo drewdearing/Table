@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
@@ -50,6 +51,8 @@ public class ProfileFragment extends Fragment {
     private RecyclerView recyclerView;
     private TableAdapter adapter;
     private AppCompatButton button;
+    private Context context;
+    private SwipeRefreshLayout swipeLayout;
 
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container,
@@ -67,10 +70,69 @@ public class ProfileFragment extends Fragment {
         tableHeader = v.findViewById(R.id.tableHeader);
         profilePic = v.findViewById(R.id.profilePic);
         recyclerView = (RecyclerView) v.findViewById(R.id.profile_list);
+        button = v.findViewById(R.id.edit_button);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-
         database = FirebaseDatabase.getInstance();
         myRef = database.getReference();
+        context = container.getContext();
+        initButton();
+        initDetails();
+        swipeLayout = v.findViewById(R.id.swipe_container);
+        swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                loadData();
+            }
+        });
+        loadData();
+
+        return v;
+    }
+
+    private void initButton(){
+        if(!userId.equals(profileId)) {
+            button.setEnabled(false);
+            button.setVisibility(View.GONE);
+        }
+        else {
+            button.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    bioEdit.setVisibility(View.VISIBLE);
+                    bioText.setVisibility(View.GONE);
+                    button.setVisibility(View.GONE);
+                    bioEdit.requestFocus();
+                    bioEdit.setSelection(bioEdit.getText().length());
+                    InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.showSoftInput(bioEdit, InputMethodManager.SHOW_IMPLICIT);
+                }
+            });
+        }
+    }
+
+    private void initDetails(){
+        bioEdit.setHorizontallyScrolling(false);
+        bioEdit.setMaxLines(5);
+        bioEdit.setOnEditorActionListener(new EditText.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    Log.w("action done", "pls");
+                    InputMethodManager imm = (InputMethodManager)v.getContext().getSystemService(context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                    bioText.setText(bioEdit.getText());
+                    bioEdit.setVisibility(View.GONE);
+                    bioText.setVisibility(View.VISIBLE);
+                    user = new User(user, bioEdit.getText().toString());
+                    myRef.child("Users").child(user.getId()).setValue(user);
+                    button.setVisibility(View.VISIBLE);
+                    return true;
+                }
+                return false;
+            }
+        });
+    }
+
+    private void loadData(){
         myRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -96,55 +158,14 @@ public class ProfileFragment extends Fragment {
                         }
                     }
                 }
-                adapter = new TableAdapter(container.getContext(), tables, userId);
+                adapter = new TableAdapter(context, tables, userId);
                 recyclerView.setAdapter(adapter);
+                swipeLayout.setRefreshing(false);
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {}
         });
-
-        button = v.findViewById(R.id.edit_button);
-
-        if(!userId.equals(profileId)) {
-            button.setEnabled(false);
-            button.setVisibility(View.GONE);
-        }
-        else {
-            button.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    bioEdit.setVisibility(View.VISIBLE);
-                    bioText.setVisibility(View.GONE);
-                    button.setVisibility(View.GONE);
-                    bioEdit.requestFocus();
-                    bioEdit.setSelection(bioEdit.getText().length());
-                    InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.showSoftInput(bioEdit, InputMethodManager.SHOW_IMPLICIT);
-                }
-            });
-        }
-        bioEdit.setHorizontallyScrolling(false);
-        bioEdit.setMaxLines(5);
-        bioEdit.setOnEditorActionListener(new EditText.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    Log.w("action done", "pls");
-                    InputMethodManager imm = (InputMethodManager)v.getContext().getSystemService(container.getContext().INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-                    bioText.setText(bioEdit.getText());
-                    bioEdit.setVisibility(View.GONE);
-                    bioText.setVisibility(View.VISIBLE);
-                    user = new User(user, bioEdit.getText().toString());
-                    myRef.child("Users").child(user.getId()).setValue(user);
-                    button.setVisibility(View.VISIBLE);
-                    return true;
-                }
-                return false;
-            }
-        });
-
-        return v;
     }
 
     private void setUserInfo(){

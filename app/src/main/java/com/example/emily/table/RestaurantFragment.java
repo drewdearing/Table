@@ -4,6 +4,7 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -51,6 +52,7 @@ public class RestaurantFragment extends Fragment {
     private RestaurantAdapter listAdapter;
     private ActionBar actionBar;
     private String userId;
+    private SwipeRefreshLayout swipeLayout;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -61,6 +63,14 @@ public class RestaurantFragment extends Fragment {
         rv.setLayoutManager(new LinearLayoutManager(getContext()));
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(getActivity());
         requestQueue = Volley.newRequestQueue(getActivity());
+        //Set Refreshing
+        swipeLayout = v.findViewById(R.id.swipe_container);
+        swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                queryPlaces();
+            }
+        });
         queryPlaces();
         userId = getArguments().getString("userId");
         isDebug = ((Home) getActivity()).isDebug();
@@ -75,7 +85,6 @@ public class RestaurantFragment extends Fragment {
     }
 
     private void queryPlaces() {
-
         if (getActivity().checkSelfPermission(android.Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
@@ -126,6 +135,7 @@ public class RestaurantFragment extends Fragment {
                         }
                     });
         }
+        swipeLayout.setRefreshing(false);
     }
 
     @Override

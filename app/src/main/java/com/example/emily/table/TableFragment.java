@@ -1,9 +1,11 @@
 package com.example.emily.table;
 
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -43,6 +45,8 @@ public class TableFragment extends Fragment {
     private ActionBar actionBar;
     private String userId;
     private Location userLocation;
+    private Context context;
+    private SwipeRefreshLayout swipeLayout;
 
 
 
@@ -56,38 +60,19 @@ public class TableFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         userId = getArguments().getString("userId");
         isDebug = ((Home) getActivity()).isDebug();
-        //get current user location
-        getCurrentLocation();
-
         database = FirebaseDatabase.getInstance();
         myRef = database.getReference();
-        myRef.addValueEventListener(new ValueEventListener() {
+        context = container.getContext();
+        //get current user location
+        //Set Refreshing
+        swipeLayout = v.findViewById(R.id.swipe_container);
+        swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                // This method is called once with the initial value and again
-                // whenever data at this location is updated.
-                Log.d(TAG, "table onDataChange");
-                ArrayList<Table> tables = new ArrayList<>();
-                DataSnapshot tableSnapShot = dataSnapshot.child("Tables");
-                for(DataSnapshot tableData : tableSnapShot.getChildren()) {
-                    Table table = tableData.getValue(Table.class);
-                    //Only show tables that are nearby
-                    if (isNearby(table.getRestaurant().getLat(), table.getRestaurant().getLon())) {
-                        tables.add(table);
-                    }
-                }
-
-                adapter = new TableAdapter(container.getContext(), tables, userId);
-                recyclerView.setAdapter(adapter);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError error) {
-                // Failed to read value
-                Log.w(TAG, "Failed to read value.", error.toException());
+            public void onRefresh() {
+                getCurrentLocation();
             }
         });
-
+        getCurrentLocation();
         return v;
     }
 
@@ -116,6 +101,7 @@ public class TableFragment extends Fragment {
                         public void onSuccess(Location location) {
                             if (location != null) {
                                 userLocation = location;
+                                setData();
                             }
                         }
                     });
@@ -127,9 +113,53 @@ public class TableFragment extends Fragment {
         }
     }
 
+    private void setData(){
+        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+                ArrayList<Table> tables = new ArrayList<>();
+                DataSnapshot tableSnapShot = dataSnapshot.child("Tables");
+                for(DataSnapshot tableData : tableSnapShot.getChildren()) {
+                    Table table = tableData.getValue(Table.class);
+                    //Only show tables that are nearby
+                    if (isNearby(table.getRestaurant().getLat(), table.getRestaurant().getLon())) {
+                        tables.add(table);
+                    }
+                }
+
+                adapter = new TableAdapter(context, tables, userId);
+                recyclerView.setAdapter(adapter);
+                swipeLayout.setRefreshing(false);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Log.w(TAG, "Failed to read value.", error.toException());
+            }
+        });
+    }
+
     @Override
-    public void onActivityCreated(Bundle b) {
-        super.onActivityCreated(b);
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if(userLocation != null){
+            outState.putDoubleArray("userLocation", new double[]{userLocation.getLatitude(), userLocation.getLongitude()});
+        }
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        if (savedInstanceState != null) {
+            //Restore the fragment's state here
+            double[] loc = savedInstanceState.getDoubleArray("userLocation");
+            userLocation = new Location("currentLocation");
+            userLocation.setLatitude(loc[0]);
+            userLocation.setLongitude(loc[1]);
+        }
         actionBar = ((AppCompatActivity)getActivity()).getSupportActionBar();
         actionBar.setTitle("Find a Table");
     }
