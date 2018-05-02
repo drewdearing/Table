@@ -113,36 +113,11 @@ public class Home extends AppCompatActivity {
         Intent activityThatCalled = getIntent();
         Bundle callingBundle = activityThatCalled.getExtras();
         if (callingBundle != null) {
+
             database = FirebaseDatabase.getInstance();
             myRef = database.getReference();
             userId = callingBundle.getString("id");
             profileId = userId;
-            Bundle userBundle = new Bundle();
-            userBundle.putString("userId", userId);
-            //Create Fragments, copied from DemoListViewFrag
-            startFragment = new RestaurantFragment();
-            startFragment.setArguments(userBundle);
-            findFragment = new TableFragment();
-            profileFragment = new ProfileFragment();
-            ft = getSupportFragmentManager().beginTransaction();
-            ft.add(R.id.theFrame, startFragment, restaurantTag);
-            ft.add(R.id.theFrame, findFragment, tableTag);
-            ft.detach(findFragment);
-            ft.add(R.id.theFrame, profileFragment, profileTag);
-            ft.detach(profileFragment);
-            ft.commit();
-            prevFragment = startFragment;
-            prevLayoutId = R.id.start;
-
-            //Set Refreshing
-            final SwipeRefreshLayout swipeLayout = findViewById(R.id.swipe_container);
-            swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-                @Override
-                public void onRefresh() {
-                    navigation.setSelectedItemId(prevLayoutId);
-                    swipeLayout.setRefreshing(false);
-                }
-            });
 
             //Enable Location Services
             //code from https://developer.android.com/training/location/change-location-settings
@@ -154,8 +129,7 @@ public class Home extends AppCompatActivity {
             task.addOnSuccessListener(this, new OnSuccessListener<LocationSettingsResponse>() {
                 @Override
                 public void onSuccess(LocationSettingsResponse locationSettingsResponse) {
-                    //Refresh the restaurant fragment
-                    ft.detach(startFragment).attach(startFragment).commit();
+                    initFragments();
                 }
             });
 
@@ -182,6 +156,35 @@ public class Home extends AppCompatActivity {
             Log.d("HELP", "BUNDLE == NULL");
             finish();
         }
+    }
+
+    private void initFragments(){
+        Bundle userBundle = new Bundle();
+        userBundle.putString("userId", userId);
+        //Create Fragments, copied from DemoListViewFrag
+        startFragment = new RestaurantFragment();
+        startFragment.setArguments(userBundle);
+        findFragment = new TableFragment();
+        profileFragment = new ProfileFragment();
+        ft = getSupportFragmentManager().beginTransaction();
+        ft.add(R.id.theFrame, startFragment, restaurantTag);
+        ft.add(R.id.theFrame, findFragment, tableTag);
+        ft.detach(findFragment);
+        ft.add(R.id.theFrame, profileFragment, profileTag);
+        ft.detach(profileFragment);
+        ft.commit();
+        prevFragment = startFragment;
+        prevLayoutId = R.id.start;
+
+        //Set Refreshing
+        final SwipeRefreshLayout swipeLayout = findViewById(R.id.swipe_container);
+        swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                navigation.setSelectedItemId(prevLayoutId);
+                swipeLayout.setRefreshing(false);
+            }
+        });
     }
 
     protected void createLocationRequest() {
