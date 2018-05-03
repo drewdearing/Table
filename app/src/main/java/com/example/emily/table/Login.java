@@ -34,7 +34,6 @@ public class Login extends AppCompatActivity {
     protected LoginButton loginButton;
     private FirebaseDatabase database;
     private DatabaseReference myRef;
-    private TextView textView;
     static final int LOG_OUT_REQUEST = 1;  // The request code
     private FacebookCallback<LoginResult> callback;
 
@@ -43,8 +42,6 @@ public class Login extends AppCompatActivity {
         Log.d("Login", "onCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        textView = findViewById(R.id.login_message);
-        textView.setText("Welcome to Table!");
         FacebookSdk.sdkInitialize(getApplicationContext());
         callbackManager = CallbackManager.Factory.create();
         accessTokenTracker = new AccessTokenTracker() {
@@ -70,7 +67,6 @@ public class Login extends AppCompatActivity {
                 AccessToken accessToken = loginResult.getAccessToken();
                 Profile profile = Profile.getCurrentProfile();
                 login(profile);
-                Toast.makeText(getApplicationContext(), "Logging in...", Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -89,12 +85,11 @@ public class Login extends AppCompatActivity {
     private void login(Profile p) {
         if(p != null) {
             checkUser(p);
-            Log.d("Login", "Login(p)");
+            Toast.makeText(getApplicationContext(), "Logging in...", Toast.LENGTH_SHORT).show();
         }
     }
 
     private void checkUser(final Profile p) {
-//        textView.setText("Loading...");
         database = FirebaseDatabase.getInstance();
         myRef = database.getReference();
 
@@ -169,7 +164,6 @@ public class Login extends AppCompatActivity {
 
         if (requestCode == LOG_OUT_REQUEST){
             Log.w("TAG", "logged out");
-            textView.setText("Welcome to Table!");
         }
     }
 

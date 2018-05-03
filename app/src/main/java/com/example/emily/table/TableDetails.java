@@ -105,7 +105,6 @@ public class TableDetails extends AppCompatActivity {
     //Sets up all visible views as well as create the recycler view
     private void initViews() {
         TextView desc = findViewById(R.id.details_desc);
-        desc.setMovementMethod(ScrollingMovementMethod.getInstance());
         desc.setText(table.getDescription());
 
         if(isOwner){
@@ -113,7 +112,7 @@ public class TableDetails extends AppCompatActivity {
         }
 
         TextView address = findViewById(R.id.address);
-        address.setText(table.getRestaurant().getAddress());
+        address.setText(table.getRestaurant().getName()+"\n"+table.getRestaurant().getAddress());
         Log.d("address in table detail", table.getRestaurant().getAddress());
 
         ImageView img = findViewById(R.id.details_image);
@@ -125,6 +124,7 @@ public class TableDetails extends AppCompatActivity {
                 .into(img);
 
         recyclerView = (RecyclerView) findViewById(R.id.details_guest_list);
+        recyclerView.setNestedScrollingEnabled(false);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         guests = new ArrayList<>();
         guestIds = new ArrayList<>();

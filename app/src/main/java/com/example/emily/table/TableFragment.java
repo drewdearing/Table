@@ -101,15 +101,17 @@ public class TableFragment extends Fragment {
                         public void onSuccess(Location location) {
                             if (location != null) {
                                 userLocation = location;
-                                setData();
                             }
+                            else{
+                                if(isDebug){
+                                    userLocation = new Location("currentLocation");
+                                    userLocation.setLatitude(30.286253);
+                                    userLocation.setLongitude(-97.7386227);
+                                }
+                            }
+                            setData();
                         }
                     });
-        }
-        if(userLocation == null && isDebug){
-            userLocation = new Location("currentLocation");
-            userLocation.setLatitude(30.286253);
-            userLocation.setLongitude(-97.7386227);
         }
     }
 

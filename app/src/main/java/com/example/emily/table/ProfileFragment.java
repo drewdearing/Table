@@ -70,6 +70,7 @@ public class ProfileFragment extends Fragment {
         tableHeader = v.findViewById(R.id.tableHeader);
         profilePic = v.findViewById(R.id.profilePic);
         recyclerView = (RecyclerView) v.findViewById(R.id.profile_list);
+        recyclerView.setNestedScrollingEnabled(false);
         button = v.findViewById(R.id.edit_button);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         database = FirebaseDatabase.getInstance();
