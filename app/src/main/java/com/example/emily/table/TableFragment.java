@@ -82,8 +82,12 @@ public class TableFragment extends Fragment {
         otherLocation.setLatitude(lat1);
         otherLocation.setLongitude(lng1);
 
-        double distance = userLocation.distanceTo(otherLocation);
-        return distance < 5000;
+        if (userLocation != null) {
+            double distance = userLocation.distanceTo(otherLocation);
+            return distance < 5000;
+        } else {
+            return false;
+        }
 
     }
 
