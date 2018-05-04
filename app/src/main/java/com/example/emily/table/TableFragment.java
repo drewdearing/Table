@@ -63,7 +63,7 @@ public class TableFragment extends Fragment {
         database = FirebaseDatabase.getInstance();
         myRef = database.getReference();
         context = container.getContext();
-        //get current user location
+
         //Set Refreshing
         swipeLayout = v.findViewById(R.id.swipe_container);
         swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -72,6 +72,8 @@ public class TableFragment extends Fragment {
                 getCurrentLocation();
             }
         });
+
+        //Get current user location
         getCurrentLocation();
         return v;
     }
